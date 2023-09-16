@@ -24,13 +24,34 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import service from '../services/ApiService';
 export default {
   props: ['post'],
   setup(props) {
-         const handleDelete = () => {
-            //service.delete(props.branch.id, 'branches')
-            alert("deleting.." + props.post.postId)
-        }
+
+    const id = props.post.postId;
+    const toast = useToast();
+    const router = useRouter();
+
+
+    const handleDelete = () => {
+        console.log("id " + id)
+        service.delete('post', id)
+            .then(res => {
+                if(res) {
+                    toast.success("Post deleted successfully!")
+                    router.push('/')
+                }
+                console.log(res)
+            }).catch(err => {
+                if(err) {
+                    toast.error("There was an error deleting, please try again later.")
+                }
+            })
+
+    }
 
 
         return {

@@ -41,7 +41,6 @@
           <div class="mb-3">
             <label for="fuelType">Fuel Type:</label>
             <select class="form-select" name="fuelType" id="fuelType" v-model="post.vehicle.fuelType"  required>
-              <option selected disabled>Select a Fuel Type</option>
               <option value="PETROL">Petrol</option>
               <option value="DIESEL">Diesel</option>
               <option value="ELECTRIC">Electric</option>
@@ -51,7 +50,6 @@
           <div class="mb-3">
             <label for="bodyType">Body Type:</label>
             <select class="form-select" name="bodyType" id="bodyType" v-model="post.vehicle.bodyType" required>
-              <option selected>Select a Body Type</option>
               <option value="SEDAN">Sedan</option>
               <option value="COUPE">Coupe</option>
               <option value="HATCHBACK">Hatchback</option>
@@ -63,7 +61,6 @@
           <div class="mb-3">
             <label for="vehicleCondition">Vehicle Condition:</label>
             <select class="form-select" name="condition" id="condition"  v-model="post.vehicle.condition" required>
-              <option selected disabled>Select a Vehicle Condition</option>
               <option value="NEW">New</option>
               <option value="USED">Used</option>
               <option value="DEMO">Demo</option>

@@ -7,40 +7,39 @@
       <!-- Post Information -->
       <div class="mb-3">
         <label for="title">Title:</label>
-        <input type="text" class="form-control" id="title" name="title" v-model="title" required />
+        <input type="text" class="form-control" id="title" name="title" v-model="post.title" required />
       </div>
 
       <div class="mb-3">
         <label for="description">Description:</label>
-        <textarea class="form-control" id="description" name="description" v-model="description" required></textarea>
+        <textarea class="form-control" id="description" name="description" v-model="post.description" required></textarea>
       </div>
 
       <div class="mb-3">
         <span style="color: red; font-size:.75rem; float: right" v-if="errors.price">{{errors.price}}</span>
         <label for="price">Price:</label>
-        <input type="number" class="form-control" id="price" name="price" v-model="price" required />
+        <input type="number" class="form-control" id="price" name="price" v-model="post.price" required />
       </div>
 
       <!-- Vehicle Information -->
       <div class="mb-3">
         <label for="make">Vehicle Make:</label>
-        <input type="text" class="form-control" id="make" name="make" v-model="vehicle.make" required />
+        <input type="text" class="form-control" id="make" name="make" v-model="post.vehicle.make" required />
       </div>
 
       <div class="mb-3">
         <label for="model">Vehicle Model:</label>
-        <input type="text" class="form-control" id="model" name="model" v-model="vehicle.model" required />
+        <input type="text" class="form-control" id="model" name="model" v-model="post.vehicle.model" required />
       </div>
 
       <div class="mb-3">
         <label for="colour">Vehicle Color:</label>
-        <input type="text" class="form-control" id="colour" name="colour" v-model="vehicle.colour" required />
+        <input type="text" class="form-control" id="colour" name="colour" v-model="post.vehicle.colour" required />
       </div>
 
       <div class="mb-3">
         <label for="fuelType">Fuel Type:</label>
-        <select class="form-select" name="fuelType" id="fuelType" required>
-          <option selected disabled>Select a Fuel Type</option>
+        <select class="form-select" name="fuelType" id="fuelType" v-model="post.vehicle.fuelType" required>
           <option value="PETROL">Petrol</option>
           <option value="DIESEL">Diesel</option>
           <option value="ELECTRIC">Electric</option>
@@ -49,8 +48,7 @@
 
       <div class="mb-3">
         <label for="bodyType">Body Type:</label>
-        <select class="form-select" name="bodyType" id="bodyType"  required>
-          <option selected>Select a Body Type</option>
+        <select class="form-select" name="bodyType" id="bodyType" v-model="post.vehicle.bodyType" required>
           <option value="SEDAN">Sedan</option>
           <option value="COUPE">Coupe</option>
           <option value="HATCHBACK">Hatchback</option>
@@ -59,9 +57,8 @@
       </div>
 
       <div class="mb-3">
-        <label for="vehicleCondition">Vehicle Condition:</label>
-        <select class="form-select" name="vehicleCondition" id="vehicleCondition" required>
-          <option selected disabled>Select a Vehicle Condition</option>
+        <label for="condition">Vehicle Condition:</label>
+        <select class="form-select" name="condition" id="condition" v-model="post.vehicle.condition" required>
           <option value="NEW">New</option>
           <option value="USED">Used</option>
           <option value="DEMO">Demo</option>
@@ -81,12 +78,11 @@
 
       <div class="mb-3">
         <label for="branch">Branch:</label>
-        <span>No branches available?
-          <router-link v-bind:to="{ name: 'create-branch' }">Create one</router-link>
-        </span>
-        <select class="form-select" name="branch" id="branch" required>
-          <option selected disabled>Select a Branch</option>
-        </select>
+          <span>No branches available?<router-link :to="{ name: 'create-branch' }">Create one</router-link></span>
+          <select class="form-select" name="branches" id="branches" v-model="post.branch.branchId" required>
+            <option selected disabled>Select a Branch</option>
+            <option :value="value.branchId" :key="key" v-for="(value, key) in branches" >{{value.branchName}}</option>
+          </select>
       </div>
 
       <button class="btn btn-primary fw-bold w-100 p-3">Create Listing</button>
@@ -95,7 +91,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import service from '../services/ApiService';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
@@ -107,24 +103,31 @@ export default {
     const post = ref({
       title: "",
       description: "",
-      price: 0,
+      price: undefined,
       vehicle: {
         make: "",
         model: "",
-        year: 0,
+        year: undefined,
+        mileage: undefined,
         colour: "",
-        fuelType: "",
-        vehicleCondition: "",
-        bodyType: ""
+        fuelType: undefined,
+        vehicleCondition: undefined,
+        bodyType: undefined
       },
       branch: {
-        branchId: 0
+        branchId: undefined
       }
     });
 
+    const branches = ref(null);
     const errors = ref({});
     const router = useRouter();
     const toast = useToast(); 
+
+    onMounted(async () => {
+      branches.value = await service.getAll('branch', 'all', null);
+
+    })
 
     const validatePost = (value) => {
       value.price < 0 ? errors.value['price'] =  "Price is invalid" : errors.value['price'] =  ""
@@ -142,8 +145,10 @@ export default {
     });
 
     const handleSubmit = async () => {
+      console.log("submitting")
+      console.log(post.value)
       
-      await service.update('post', post.value).then(res => {
+      await service.create('post', post.value).then(res => {
               if(res) {
                   toast.success("Post created successfully!", {timeout: 3000})
                   router.push('posts')
@@ -157,7 +162,7 @@ export default {
 
 
     return {
-      post, handleSubmit, errors, validatePost
+      post, branches, handleSubmit, errors, validatePost
     }
     
   }

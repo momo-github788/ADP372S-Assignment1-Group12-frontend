@@ -28,15 +28,34 @@
 
 <script>
 import service from '../services/ApiService'
+import { useToast } from "vue-toastification";
+import { useRouter } from 'vue-router';
+
 export default {
     props: ['branch'],
 
     setup(props) {
 
+        const id = props.branch.branchId;
+        const toast = useToast();
+        const router = useRouter();
 
+  
         const handleDelete = () => {
-            //service.delete(props.branch.id, 'branches')
-            alert("deleting.." + props.branch.branchId)
+            console.log("delete " + id)
+            service.delete('branch', id)
+                .then(res => {
+                    if(res) {
+                        toast.success("Branch deleted successfully!")
+                        router.push('/')
+                    }
+                    console.log(res)
+                }).catch(err => {
+                    if(err) {
+                        toast.error("Post located at this branch is in use, delete that post to remove the branch.")
+                    }
+                })
+     
         }
 
 

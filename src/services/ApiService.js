@@ -13,12 +13,12 @@ class ApiService {
         
             // We know this is for searching posts
             if(title && title != null) {
+              console.log("title is not null")
               response = await axios.get(`${BASE_URL}/${domain}/${action}?title=${title}`); 
             } else {
+              console.log("title is nuull")
               response = await axios.get(`${BASE_URL}/${domain}/${action}`); 
             }
-
-            console.log(response)
             return response.data;
           } catch (error) {
             // Handle errors here
@@ -54,7 +54,7 @@ class ApiService {
             return response.data; 
           } catch (error) {
             // Handle errors here
-            console.error('Error fetching results:', error);
+
             throw new Error(error.response.data);
           }
     }
@@ -65,7 +65,6 @@ class ApiService {
             return response.data; 
           } catch (error) {
             // Handle errors here
-            console.error('Error fetching results:', error);
             throw new Error(error.response.data);
           }
     }

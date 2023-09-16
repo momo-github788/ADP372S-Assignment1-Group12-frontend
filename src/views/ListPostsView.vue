@@ -5,9 +5,18 @@
       <div class="col-md-8 search-results-container mt-3 mb-4">
         
 
+        <div v-if="!loading">
+          <h1 class="fw-bold">Search Results</h1>
+        </div>
+
+        <div v-else>
+            <h1 class="fw-bold">Loading results..</h1>
+            <p>This won't take long</p>
+        </div>
+   
         <!-- If we get posts from our api, show this -->
-        <div v-if="posts">
-          <h1 class="fw-bold">Search Results for</h1>
+        <div v-if="!loading && posts">
+          
           <div class="row mt-5">
             <div class="col-md-4 mb-2 search-result-container">
               <div class="mb-2" v-for="post in posts" :key="post.postId">
@@ -16,6 +25,8 @@
             </div>
           </div>
         </div>
+
+
 
   
 
@@ -28,19 +39,35 @@
 import { onMounted, ref } from 'vue'
 
 import service from '../services/ApiService'
+import { useRoute } from 'vue-router'
 
 export default {
-  // props: ['posts'],
   setup() {
     const posts = ref(null)
+    const route = useRoute();
+    const loading = ref(true);
 
-    onMounted(async () => {
- 
-      posts.value = await service.getAll('post', 'search', null);
+  
+    onMounted( () => {
+      loading.value = true;
+      const title = route.query.title;
+
+      // delay fetching results by a bit to show loading state
+      setTimeout(async () => {
+        if(title && title != null) {
+          posts.value = await service.getAll('post', 'search', title);
+          loading.value = false;
+        } else {
+          posts.value = await service.getAll('post', 'search', null);
+          loading.value = false;
+        }
+      }, 750)
+
     })
+    
 
     return {
-      posts
+      posts, route, loading
     }
   }
 }

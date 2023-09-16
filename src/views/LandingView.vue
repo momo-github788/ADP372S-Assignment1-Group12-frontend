@@ -6,10 +6,14 @@
             <div class="col-lg-6 offset-lg-3">
                 <h1 class="hero-title">Find your dream vehicle</h1>
                 <p class="hero-description">We offer a variety of pre-loved vehicles at affordable prices</p>
-                <form @submit.prevent="handleSubmit" class="d-flex search-form">
+                <form  @submit.prevent="handleSubmit" class="d-flex search-form">
                     <input class="form-control me-2" type="search" name="title" v-model="title" placeholder="Search" aria-label="Search">
             
-                    <button @click="searchPosts" class="btn" type="submit">Search</button>
+<!-- 
+                    <router-link :to="{name: 'posts', params: {title: title}}"> -->
+                        <button class="btn">Search</button>
+                    <!-- </router-link> -->
+                 
                  
                   
                 </form>
@@ -20,26 +24,24 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue'
+import { ref} from 'vue'
 import { useRouter } from 'vue-router';
 
-useRouter
 export default {
     setup() {
         const title = ref('');
         const router = useRouter();
+     
 
-        // Use computed property to filter the list based on the search term
-        const filteredList = computed(() => {
-            return props.items.filter(item => item.name.toLowerCase().includes(searchTerm.value.toLowerCase()));
-        });
 
-        const searchPosts = () => {
-            router.push('/posts')
+        const handleSubmit = () => {
+            router.push({ path: 'posts', query: { title: title.value }})
+
+            
         }
 
         return {
-            title, filteredList, searchPosts
+            title, handleSubmit
         }
 
     }
