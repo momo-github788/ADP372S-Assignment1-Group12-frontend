@@ -117,4 +117,63 @@ body .search-results-container .search-result-container .branch-card .card-body 
     padding: .85rem;
 }
 
+
+#upload-image-container {
+  border-radius: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #F4F6F9;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+#upload-image-container .add-or-update-images-form .add-or-update-images-form-group .upload-images-container .display {
+  display: block;
+}
+
+#upload-image-container  .add-or-update-images-form .add-or-update-images-form-group .upload-images-container .hide {
+  display: none;
+}
+
+#upload-image-container label p{
+  width: 75%;
+  margin: 0 auto;
+  letter-spacing: -.6px;
+  font-weight: bold;
+  color: rgb(88, 88, 88);
+
+}
+
+
+#upload-image-container .file-input{
+  height: 0;
+  overflow: hidden;
+  width: 0;
+}
+
+
+#upload-image-preview-container {
+
+ }
+
+#upload-image-preview-container img {
+  width: 100%;
+  object-fit: contain;
+  background-color: palegoldenrod;
+  margin: 1rem 0 1rem 0;
+  border-radius: 10px;
+}
+
+#remove-image-btn {
+    font-weight: bold;
+    background-color: rgb(216, 63, 63);
+    padding: .75rem;
+    color: #fff;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
 </style>

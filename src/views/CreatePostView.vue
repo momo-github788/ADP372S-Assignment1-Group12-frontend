@@ -4,6 +4,24 @@
 
     <h1 class="fw-bold">Create a Post</h1>
     <form @submit.prevent="handleSubmit">
+
+      
+      <div id="upload-image-container">
+        <label for="file-input">
+            <i style="font-size: 2.5rem; color:  rgb(88, 88, 88);" class="bi bi-cloud-upload"></i>
+            <p className="upload-text"> Uploading an image makes the post more likely to be viewed.</p>
+            <input type="file" id="file-input" @change="handleImageChange" className="file-input shadow-none choose-category"  />
+        </label>
+      </div>
+
+      <div v-if="previewSelectedImage">
+        <div id="upload-image-preview-container" >
+          <img :src="previewSelectedImage" alt="Vehicle image"/>
+        </div>
+
+        <button class="btn" id="remove-image-btn" @click="removeImage">Remove</button>
+      </div>
+   
       <!-- Post Information -->
       <div class="mb-3">
         <label for="title">Title:</label>
@@ -102,27 +120,55 @@ export default {
     
     const post = ref({
       title: "",
-      description: "",
-      price: undefined,
+      description: "test",
+      price: 9993,
       vehicle: {
-        make: "",
-        model: "",
-        year: undefined,
-        mileage: undefined,
-        colour: "",
-        fuelType: undefined,
-        vehicleCondition: undefined,
-        bodyType: undefined
+        make: "audi",
+        model: "a3",
+        year: 222,
+        mileage: 222,
+        colour: "red",
+        fuelType: 'PETROL',
+        condition: 'USED',
+        bodyType: 'SEDAN'
       },
       branch: {
-        branchId: undefined
+        branchId: 1
       }
     });
 
+    const selectedImage = ref(null);
+    const previewSelectedImage = ref(null);
     const branches = ref(null);
     const errors = ref({});
     const router = useRouter();
     const toast = useToast(); 
+
+    const removeImage = () => {
+      previewSelectedImage.value = null;
+      selectedImage.value = null;
+
+         console.log("previewSelectedImage")
+      console.log(previewSelectedImage.value)
+
+        console.log("selectedImage")
+      console.log(selectedImage.value)
+    }
+
+
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+  
+
+      previewSelectedImage.value = URL.createObjectURL(file);
+      selectedImage.value = file;
+
+      console.log("previewSelectedImage")
+      console.log(previewSelectedImage.value)
+
+        console.log("selectedImage")
+      console.log(selectedImage.value)
+    }
 
     onMounted(async () => {
       branches.value = await service.getAll('branch', 'all', null);
@@ -147,9 +193,12 @@ export default {
     const handleSubmit = async () => {
       console.log("submitting")
       console.log(post.value)
+      console.log(selectedImage.value)
       
-      await service.create('post', post.value).then(res => {
-              if(res) {
+      await service.create('post', post.value, selectedImage.value).then(res => {
+
+          if(res) {
+                  console.log("create success")
                   toast.success("Post created successfully!", {timeout: 3000})
                   router.push('posts')
               }
@@ -162,13 +211,14 @@ export default {
 
 
     return {
-      post, branches, handleSubmit, errors, validatePost
+      post, branches, handleSubmit, errors, validatePost, handleImageChange, selectedImage, previewSelectedImage, removeImage
     }
     
   }
 
 }
 </script>
+
 
 <style>
 </style>

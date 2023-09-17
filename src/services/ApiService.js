@@ -38,20 +38,77 @@ class ApiService {
           }
     }
 
-    async create(domain, body) {
+    async create(domain, body, image) {
         try {
-            const response = await axios.post(`${BASE_URL}/${domain}/create`, body); 
-            return response.data; 
+
+            const options = {
+              headers: {'Content-Type':'multipart/form-data'}
+            }
+
+            const blob = new Blob([JSON.stringify(body)], {
+              type: "application/json"
+            });
+
+            const formData = new FormData();
+
+            if(image && image != null) { // This is to create a Post, the request contains a image to upload
+              console.log("there is an image multipart")
+ 
+              formData.append("image", image)
+              formData.append("post", blob);
+
+              const response = await axios.post(`${BASE_URL}/${domain}/create`, formData, options); 
+              return response.data; 
+            } else if(image == null && domain === 'post') { // This is to create a Post, the request doesnt contain a image to upload
+        
+              formData.append("post", blob);
+              const response = await axios.post(`${BASE_URL}/${domain}/create`, formData, options); 
+              return response.data; 
+            } else { // This is to create any other type of entity which doesnt accept form data.. just normal request body
+              console.log("no image and domain is not post")
+
+              const response = await axios.post(`${BASE_URL}/${domain}/create`, body); 
+              return response.data; 
+            }
+
+         
           } catch (error) {
             throw new Error(error.response.data);
           }
     }
 
-    async update(domain, body) {
+    async update(domain, body, image) {
         try {
-            const response = await axios.post(`${BASE_URL}/${domain}/update`, body); 
 
-            return response.data; 
+            const options = {
+              headers: {'Content-Type':'multipart/form-data'}
+            }
+
+            const blob = new Blob([JSON.stringify(body)], {
+              type: "application/json"
+            });
+
+            const formData = new FormData();
+            
+            if(image && image != null) { // This is to create a Post, the request contains a image to upload
+              console.log("there is an image multipart")
+ 
+              formData.append("image", image)
+              formData.append("post", blob);
+
+              const response = await axios.post(`${BASE_URL}/${domain}/update`, formData, options); 
+              return response.data; 
+            } else if(image == null && domain === 'post') { // This is to create a Post, the request doesnt contain a image to upload
+        
+              formData.append("post", blob);
+              const response = await axios.post(`${BASE_URL}/${domain}/update`, formData, options); 
+              return response.data; 
+            } else { // This is to create any other type of entity which doesnt accept form data.. just normal request body
+              console.log("no image and domain is not post")
+
+              const response = await axios.post(`${BASE_URL}/${domain}/update`, body); 
+              return response.data; 
+            }
           } catch (error) {
             // Handle errors here
 
@@ -69,6 +126,35 @@ class ApiService {
           }
     }
     
+    async createWatchlist(postId) {
+      try {
+        const response = await axios.get(`${BASE_URL}/watchlist/${postId}`); 
+        return response.data; 
+      } catch (error) {
+        // Handle errors here
+        throw new Error(error.response.data);
+      }
+    }
+
+    async getAllWatchlistedPosts() {
+      try {
+        const response = await axios.get(`${BASE_URL}/watchlist/all`); 
+        return response.data; 
+      } catch (error) {
+        // Handle errors here
+        throw new Error(error.response.data);
+      }
+    }
+
+    async deleteWatchlistPost(postId) {
+      try {
+        const response = await axios.delete(`${BASE_URL}/watchlist/delete/${postId}`); 
+        return response.data; 
+      } catch (error) {
+        // Handle errors here
+        throw new Error(error.response.data);
+      }
+    }
     // add login etc
 
 }

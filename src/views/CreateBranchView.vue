@@ -61,14 +61,14 @@ export default {
 
     setup() {
         const branch = ref({
-            "branchName": "", 
+            "branchName": "33", 
             "yearOpened": undefined,
             "location": {
                 "streetNumber": undefined,
-                "streetName": "",
-                "city": "",
+                "streetName": "44",
+                "city": "44",
                 "postalCode": undefined,
-                "province": ""
+                "province": "44"
             }
         });
 
@@ -100,7 +100,7 @@ export default {
                 return;
             }
 
-            await service.create('branch', branch.value)
+            await service.create('branch', branch.value,null)
                 .then(res => {
                     if(res) {
                         toast.success("Branch created successfully!", {timeout: 3000})

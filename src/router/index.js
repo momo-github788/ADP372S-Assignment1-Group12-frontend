@@ -12,7 +12,7 @@ import LandingView from '../views/LandingView.vue'
 import ListPostsView from '../views/ListPostsView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import LoginView from '../views/LoginView.vue'
-
+import UserWatchlistedPostsView from '../views/UserWatchlistedPostsView.vue'
 import EmployeeListPostsView from '../views/EmployeeListPostsView.vue'
 
 
@@ -58,6 +58,11 @@ const router = createRouter({
       path: '/posts/:id',
       name: 'post',
       component: PostDetailsView
+    },
+    {
+      path: '/watchlisted',
+      name: 'watchlisted',
+      component: UserWatchlistedPostsView
     },
     {
       path: '/register',

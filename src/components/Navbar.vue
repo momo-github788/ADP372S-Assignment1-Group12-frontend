@@ -11,6 +11,8 @@
             <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Posts</a>
             <ul class="dropdown-menu">
                 <router-link class="dropdown-item text-dark" :to="{ name: 'posts' }">All posts</router-link>
+                <router-link class="dropdown-item text-dark" :to="{ name: 'employee-posts'}">My posts</router-link>
+                <router-link class="dropdown-item text-dark" :to="{ name: 'watchlisted' }">Watchlisted Posts</router-link>
                 <router-link class="dropdown-item text-dark" :to="{ name: 'create-post' }">Create a post</router-link>
             </ul>
             </li>

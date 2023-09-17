@@ -14,13 +14,7 @@
                 View <i class="bi bi-eye"></i>
             </router-link>
 
-            <router-link id="secondary-btn" class="btn mb-2" style="margin-right: .5rem" :to="{name: 'edit-post', params: {id: post.postId}}">
-                Edit <i class="bi bi-file-earmark-text"></i>
-            </router-link>
-
-            <button id="tertiary-btn" class="btn mb-2" style="margin-right: .5rem" @click="handleDelete">Delete <i class="bi bi-trash"></i></button>
-
-            <button id="primary-btn" class="btn mb-2"  @click="handleWatchlist">Watch</button>
+            <button id="primary-btn" class="btn mb-2"  @click="handleWatchlist">Unwatch</button>
             <br/>
             <span>{{post.createdAt}}</span>
         </div>
@@ -39,47 +33,27 @@ export default {
     const toast = useToast();
     const router = useRouter();
 
-
-
-
-    const handleDelete = () => {
+    const handleWatchlist = () => {
         console.log("id " + id)
-        service.delete('post', id)
+        service.createWatchlist(id)
             .then(res => {
                 if(res) {
-                    toast.success("Post deleted successfully!")
+                    toast.success("Post was added to your watchlist!")
                     router.push('/')
                 }
                 console.log(res)
             }).catch(err => {
                 if(err) {
-                    toast.error("There was an error deleting, please try again later.")
+                    console.log(err)
+                    toast.error("There was an error adding post to your watchlist, please try again later.")
                 }
             })
 
     }
 
-        const handleWatchlist = () => {
-            console.log("id " + id)
-            service.createWatchlist(id)
-                .then(res => {
-                    if(res) {
-                        toast.success("Post was added to your watchlist!")
-                        router.push('/')
-                    }
-                    console.log(res)
-                }).catch(err => {
-                    if(err) {
-                        console.log(err)
-                        toast.error("There was an error adding post to your watchlist, please try again later.")
-                    }
-                })
-
-        }
-
 
         return {
-            handleDelete, handleWatchlist
+            handleWatchlist
         }
   }
   
