@@ -48,23 +48,19 @@ export default {
     const loading = ref(true);
 
   
-    onMounted( () => {
+    onMounted(async () => {
       loading.value = true;
       const title = route.query.title;
 
-      // delay fetching results by a bit to show loading state
-      setTimeout(async () => {
-        if(title && title != null) {
-          posts.value = await service.getAll('post', 'search', title);
-          loading.value = false;
-        } else {
-          posts.value = await service.getAll('post', 'search', null);
-          loading.value = false;
-        }
-        console.log("posts")
-        console.log(posts.value)
-      }, 750)
-
+      if(title && title != null) {
+        posts.value = await service.getAll('post', 'search', title);
+        loading.value = false;
+      } else {
+        posts.value = await service.getAll('post', 'search', null);
+        loading.value = false;
+      }
+      // console.log("posts")
+      // console.log(posts.value)
 
 
     })

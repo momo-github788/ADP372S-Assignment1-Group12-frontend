@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { onMounted, watch, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import service from '../services/ApiService'
 
 export default {
@@ -44,10 +44,8 @@ export default {
 
     onMounted(async () => {
      
-      setTimeout(async () => {
-          branches.value = await service.getAll('branch', 'all', null);
-          loading.value = false;
-      }, 750)
+      branches.value = await service.getAll('branch', 'all', null);
+      loading.value = false;
       
     })
 

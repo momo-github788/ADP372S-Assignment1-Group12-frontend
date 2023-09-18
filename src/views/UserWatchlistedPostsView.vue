@@ -16,7 +16,7 @@
           <div class="row mt-5">
             <div class="col-md-4 mb-2 search-result-container">
               <div class="mb-2" v-for="post in watchlistedPosts" :key="post.postId">
-                <PostCard :post="post" />
+                <PostCardWatchlist :post="post" />
               </div>
             </div>
           </div>
@@ -39,16 +39,14 @@ export default {
         const loading = ref(true);
 
 
-        onMounted(() => {
-            loading.value = true;
+        onMounted(async () => {
+          console.log("mouning")
+            loading.value = false;
 
-            // delay fetching results by a bit to show loading state
-            setTimeout(async () => {    
-                watchlistedPosts.value = await service.getAllWatchlistedPosts();
-                loading.value = false;
-                console.log("watchlistedPosts")
-                console.log(watchlistedPosts.value)
-            }, 750)
+            watchlistedPosts.value = await service.getAllWatchlistedPosts();
+          
+            console.log("watchlistedPosts")
+            console.log(watchlistedPosts.value)
         })
 
         return {

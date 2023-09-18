@@ -159,7 +159,8 @@ body .search-results-container .search-result-container .branch-card .card-body 
 
  }
 
-#upload-image-preview-container img {
+#upload-image-preview-container img,
+#loaded-image-preview-container img {
   width: 100%;
   object-fit: contain;
   background-color: palegoldenrod;

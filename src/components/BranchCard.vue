@@ -37,12 +37,13 @@ export default {
 
     setup(props) {
 
-        const id = props.branch.branchId;
+    
         const toast = useToast();
         const router = useRouter();
-
+        const id = props.branch.branchId;
   
         const handleDelete = () => {
+       
             console.log("delete " + id)
             service.delete('branch', id)
                 .then(res => {
@@ -61,7 +62,7 @@ export default {
 
 
         return {
-            handleDelete
+            handleDelete, toast, id
         }
     }
 }

@@ -100,7 +100,7 @@ export default {
                 return;
             }
 
-            await service.create('branch', branch.value,null)
+            await service.create('branch', branch.value)
                 .then(res => {
                     if(res) {
                         toast.success("Branch created successfully!", {timeout: 3000})

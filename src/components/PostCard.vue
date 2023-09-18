@@ -46,15 +46,13 @@ export default {
         console.log("id " + id)
         service.delete('post', id)
             .then(res => {
-                if(res) {
-                    toast.success("Post deleted successfully!")
-                    router.push('/')
-                }
+                console.log("res")
                 console.log(res)
+                toast.success("Post deleted successfully!")
+                router.push('/')
+       
             }).catch(err => {
-                if(err) {
-                    toast.error("There was an error deleting, please try again later.")
-                }
+                toast.error("There was an error deleting, please try again later.")
             })
 
     }
@@ -63,16 +61,11 @@ export default {
             console.log("id " + id)
             service.createWatchlist(id)
                 .then(res => {
-                    if(res) {
-                        toast.success("Post was added to your watchlist!")
-                        router.push('/')
-                    }
-                    console.log(res)
+                    toast.success("Post was added to your watchlist!")
+                    router.push('/');
                 }).catch(err => {
-                    if(err) {
-                        console.log(err)
-                        toast.error("There was an error adding post to your watchlist, please try again later.")
-                    }
+                    console.log(err)
+                    toast.error("There was an error adding post to your watchlist, please try again later.")
                 })
 
         }

@@ -14,7 +14,7 @@
                 View <i class="bi bi-eye"></i>
             </router-link>
 
-            <button id="primary-btn" class="btn mb-2"  @click="handleWatchlist">Unwatch</button>
+            <button id="primary-btn" class="btn mb-2"  @click="handleUnwatch">Unwatch</button>
             <br/>
             <span>{{post.createdAt}}</span>
         </div>
@@ -33,19 +33,19 @@ export default {
     const toast = useToast();
     const router = useRouter();
 
-    const handleWatchlist = () => {
+    const handleUnwatch = () => {
         console.log("id " + id)
-        service.createWatchlist(id)
+        service.deleteWatchlistPost(id)
             .then(res => {
                 if(res) {
-                    toast.success("Post was added to your watchlist!")
+                    toast.success("Post was removed from your watchlist!")
                     router.push('/')
                 }
                 console.log(res)
             }).catch(err => {
                 if(err) {
                     console.log(err)
-                    toast.error("There was an error adding post to your watchlist, please try again later.")
+                    toast.error("There was an error removing post from your watchlist, please try again later.")
                 }
             })
 
@@ -53,7 +53,7 @@ export default {
 
 
         return {
-            handleWatchlist
+            handleUnwatch
         }
   }
   

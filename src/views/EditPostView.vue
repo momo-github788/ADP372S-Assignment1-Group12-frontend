@@ -5,6 +5,34 @@
             
         <h1 class="fw-bold">Edit Post</h1>
         <form @submit.prevent="handleSubmit">
+
+
+          <div v-if="!post.imageUpload">
+          <div id="upload-image-container">
+  
+              <label for="file-input">
+                  <i style="font-size: 2.5rem; color:  rgb(88, 88, 88);" class="bi bi-cloud-upload"></i>
+                  <p className="upload-text"> Uploading an image makes the post more likely to be viewed.</p>
+                  <input type="file" id="file-input" @change="handleImageChange" className="file-input shadow-none choose-category"  />
+              </label>
+            </div>
+          </div>
+
+          <div v-if="post.imageUpload" id="loaded-image-preview-container">
+            <img :src="'data:image/jpeg;base64,' + post.imageUpload.data" alt="Car">
+            <button class="btn" id="remove-image-btn" type="button" @click="handleImageUploadDelete">Remove</button>
+          </div>
+          
+
+          <div v-if="previewSelectedImage">
+            <div id="upload-image-preview-container" >
+              <img :src="previewSelectedImage" alt="Vehicle image"/>
+            </div>
+
+            <button class="btn" id="remove-image-btn" @click="removeImage">Remove</button>
+          </div>
+
+
           <!-- Post Information -->
           <div class="mb-3">
             <label for="title">Title:</label>
@@ -114,12 +142,28 @@ export default {
     const errors = ref({});
     const router = useRouter();
     const toast = useToast(); 
+    const selectedImage = ref(null);
+    const previewSelectedImage = ref(null);
+    
+
+    const removeImage = () => {
+      previewSelectedImage.value = null;
+      selectedImage.value = null;
+    }
+
+
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+  
+      previewSelectedImage.value = URL.createObjectURL(file);
+      selectedImage.value = file;
+    }
 
     onMounted(async () => {
       const id = route.params.id;
       branches.value = await service.getAll('branch', 'all', null);
       post.value = await service.getById('post', id);      
-
+    
       watch(post.value, (newVal, oldVal) => {
         validatePost(newVal)
 
@@ -132,22 +176,54 @@ export default {
     const validatePost = (value) => {
       value.price < 0 ? errors.value['price'] =  "Price is invalid" : errors.value['price'] =  ""
       value.vehicle.year < 0 ? errors.value['year'] =  "Vehicle year is invalid" : errors.value['year'] =  ""
+      
+    
+
+    }
+
+    const handleImageUploadDelete = async () => {
+      console.log("handleImageUploadDelete")
+      await service.deleteImageUpload(post.value.imageUpload.id)
+        .then(res => {
+          console.log("success")
+
+          post.value.imageUpload = null;
+          toast.success("Image was deleted successfully.")
+
+    
+      }).catch(err => {
+        console.log("err")
+        if(err) {
+          toast.error("There was an error removing this image. Try again later")
+
+        }
+      })
+
+
 
     }
         
 
     const handleSubmit = async () => {
 
+      console.log("submitting")
       console.log(post.value)
-      
-      await service.update('post', post.value)
+
+      const imageToUpload =  post.value.imageUpload ? post.value.imageUpload : selectedImage.value ?? null;
+
+      console.log(`imageToUpload`)
+      console.log(imageToUpload)
+
+      await service.createOrUpdatePost('update', post.value, imageToUpload)
           .then(res => {
+            console.log(res)
               if(res) {
                   toast.success("Post updated successfully!")
                   router.push('/posts')
               }
               
           }).catch(err => {
+            console.log(err.message)
               if(err){
                   toast.error("Oops.. Post with the same name exists already", {timeout: 3000})
               }
@@ -155,7 +231,8 @@ export default {
     }
 
     return {
-      post, branches, handleSubmit, errors, validatePost
+      post, branches, handleSubmit, errors, validatePost, removeImage, 
+      handleImageChange, selectedImage, previewSelectedImage, handleImageUploadDelete
     }
 
   }

@@ -147,27 +147,22 @@ export default {
     const removeImage = () => {
       previewSelectedImage.value = null;
       selectedImage.value = null;
-
-         console.log("previewSelectedImage")
-      console.log(previewSelectedImage.value)
-
-        console.log("selectedImage")
-      console.log(selectedImage.value)
     }
 
 
     const handleImageChange = (event) => {
       const file = event.target.files[0];
-  
 
+      console.log("file")
+      console.log(file)
+   
+      if(file.size > 100_000) {
+        toast.warning("Files cannot be larger than 100 Kilobytes, please try again.")
+        return;
+      }
+  
       previewSelectedImage.value = URL.createObjectURL(file);
       selectedImage.value = file;
-
-      console.log("previewSelectedImage")
-      console.log(previewSelectedImage.value)
-
-        console.log("selectedImage")
-      console.log(selectedImage.value)
     }
 
     onMounted(async () => {
@@ -195,7 +190,7 @@ export default {
       console.log(post.value)
       console.log(selectedImage.value)
       
-      await service.create('post', post.value, selectedImage.value).then(res => {
+      await service.createOrUpdatePost('create', post.value, selectedImage.value).then(res => {
 
           if(res) {
                   console.log("create success")
