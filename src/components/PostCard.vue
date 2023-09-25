@@ -33,7 +33,7 @@ import { useToast } from 'vue-toastification';
 import service from '../services/ApiService';
 export default {
   props: ['post'],
-  setup(props) {
+  setup(props, {emit}) {
 
     const id = props.post.postId;
     const toast = useToast();
@@ -43,17 +43,7 @@ export default {
 
 
     const handleDelete = () => {
-        console.log("id " + id)
-        service.delete('post', id)
-            .then(res => {
-                console.log("res")
-                console.log(res)
-                toast.success("Post deleted successfully!")
-                router.push('/')
-       
-            }).catch(err => {
-                toast.error("There was an error deleting, please try again later.")
-            })
+        emit("delete-post", id)
 
     }
 

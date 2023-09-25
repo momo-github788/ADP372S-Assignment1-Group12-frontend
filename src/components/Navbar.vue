@@ -24,6 +24,14 @@
                 <router-link class="dropdown-item text-dark" :to="{ name: 'create-branch' }">Create a branch</router-link>
             </ul>
             </li>
+
+            <li class="nav-item dropdown">
+            <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Inventory</a>
+            <ul class="dropdown-menu">
+                <router-link class="dropdown-item text-dark" :to="{ name: 'inventories' }">All Inventories</router-link>
+                <router-link class="dropdown-item text-dark" :to="{ name: 'create-inventory' }">Create an inventory</router-link>
+            </ul>
+            </li>
         </ul>
     
     

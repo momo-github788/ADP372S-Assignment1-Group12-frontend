@@ -3,6 +3,11 @@ import CreateBranchView from '../views/CreateBranchView.vue'
 import EditBranchView from '../views/EditBranchView.vue'
 import ListBranchesView from '../views/ListBranchesView.vue'
 
+import CreateInventoryView from '../views/CreateInventoryView.vue'
+import ListInventoriesView from '../views/ListInventoriesView.vue'
+import EditInventoryView from '../views/EditInventoryView.vue'
+
+
 import CreatePostView from '../views/CreatePostView.vue'
 import EditPostView from '../views/EditPostView.vue'
 
@@ -38,6 +43,21 @@ const router = createRouter({
       path: '/edit-branch/:id',
       name: 'edit-branch',
       component: EditBranchView
+    },
+    {
+      path: '/create-inventory',
+      name: 'create-inventory',
+      component: CreateInventoryView
+    },
+    {
+      path: '/edit-inventory/:id',
+      name: 'edit-inventory',
+      component: EditInventoryView
+    },
+    {
+      path: '/inventories',
+      name: 'inventories',
+      component: ListInventoriesView
     },
     {
       path: '/create-post',

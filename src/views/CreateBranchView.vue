@@ -62,12 +62,12 @@ export default {
     setup() {
         const branch = ref({
             "branchName": "33", 
-            "yearOpened": undefined,
+            "yearOpened": 2019,
             "location": {
-                "streetNumber": undefined,
+                "streetNumber": 22,
                 "streetName": "44",
                 "city": "44",
-                "postalCode": undefined,
+                "postalCode": 3333,
                 "province": "44"
             }
         });

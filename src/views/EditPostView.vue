@@ -13,7 +13,7 @@
               <label for="file-input">
                   <i style="font-size: 2.5rem; color:  rgb(88, 88, 88);" class="bi bi-cloud-upload"></i>
                   <p className="upload-text"> Uploading an image makes the post more likely to be viewed.</p>
-                  <input type="file" id="file-input" @change="handleImageChange" className="file-input shadow-none choose-category"  />
+                  <input type="file" id="file-input" accept="image/png, image/jpg, image/jpeg" @change="handleImageChange" className="file-input shadow-none choose-category"  />
               </label>
             </div>
           </div>
@@ -122,7 +122,7 @@
 
       <div v-else>
           <h1 class="fw-bold">There are no results matching this criteria.</h1>
-          <router-link :to="{name: 'posts'}" id="primary-btn" style="padding: .75rem; width: 150px" class="btn mt-3">Back to home</router-link>
+          <router-link :to="{name: 'landing'}" id="primary-btn" style="padding: .75rem; width: 150px" class="btn mt-3">Back to home</router-link>
       </div>
   </div>
 </template>
@@ -154,6 +154,13 @@ export default {
 
     const handleImageChange = (event) => {
       const file = event.target.files[0];
+      const fileInMB = (file.size / (1024*1024));
+
+      console.log(fileInMB)
+      if(fileInMB > 1) {
+        toast.error("Files cannot be larger than 1MBs, This file is " + fileInMB.toFixed(2) + " MBs")
+        return;
+      }
   
       previewSelectedImage.value = URL.createObjectURL(file);
       selectedImage.value = file;

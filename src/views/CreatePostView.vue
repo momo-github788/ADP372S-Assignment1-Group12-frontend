@@ -10,7 +10,7 @@
         <label for="file-input">
             <i style="font-size: 2.5rem; color:  rgb(88, 88, 88);" class="bi bi-cloud-upload"></i>
             <p className="upload-text"> Uploading an image makes the post more likely to be viewed.</p>
-            <input type="file" id="file-input" @change="handleImageChange" className="file-input shadow-none choose-category"  />
+            <input type="file" id="file-input" accept="image/png, image/jpg, image/jpeg" @change="handleImageChange" className="file-input shadow-none choose-category"  />
         </label>
       </div>
 
@@ -133,7 +133,7 @@ export default {
         bodyType: 'SEDAN'
       },
       branch: {
-        branchId: 1
+        branchId: null
       }
     });
 
@@ -152,12 +152,11 @@ export default {
 
     const handleImageChange = (event) => {
       const file = event.target.files[0];
+      const fileInMB = (file.size / (1024*1024));
 
-      console.log("file")
-      console.log(file)
-   
-      if(file.size > 100_000) {
-        toast.warning("Files cannot be larger than 100 Kilobytes, please try again.")
+      console.log(fileInMB)
+      if(fileInMB > 1) {
+        toast.error("Files cannot be larger than 1MBs, This file is " + fileInMB.toFixed(2) + " MBs")
         return;
       }
   

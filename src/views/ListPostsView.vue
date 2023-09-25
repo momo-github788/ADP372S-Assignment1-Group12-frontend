@@ -20,7 +20,7 @@
           <div class="row mt-5">
             <div class="col-md-4 mb-2 search-result-container">
               <div class="mb-2" v-for="post in posts" :key="post.postId">
-                <PostCard :post="post" />
+                <PostCard :post="post" @delete-post="handleDelete(post.postId)" />
               </div>
             </div>
           </div>
@@ -37,7 +37,7 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-
+import { useToast } from "vue-toastification";
 import service from '../services/ApiService'
 import { useRoute } from 'vue-router'
 
@@ -46,6 +46,21 @@ export default {
     const posts = ref(null)
     const route = useRoute();
     const loading = ref(true);
+    const toast = useToast();
+
+    const handleDelete = (id) => {
+      console.log("id " + id)
+        service.delete('post', id)
+            .then(res => {
+              if(res) {
+                posts.value = posts.value.filter(p => p.postId !== id)
+                toast.success("Post deleted successfully!")
+              }
+
+            }).catch(err => {
+                toast.error("There was an error deleting, please try again later.")
+            })
+    }
 
   
     onMounted(async () => {
@@ -67,7 +82,7 @@ export default {
     
 
     return {
-      posts, route, loading
+      posts, route, loading, handleDelete
     }
   }
 }
