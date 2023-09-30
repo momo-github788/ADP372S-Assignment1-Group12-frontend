@@ -22,38 +22,20 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router';
-import { useToast } from 'vue-toastification';
-import service from '../services/ApiService';
 export default {
   props: ['post'],
-  setup(props) {
+  setup(props, {emit}) {
 
     const id = props.post.postId;
-    const toast = useToast();
-    const router = useRouter();
 
     const handleUnwatch = () => {
-        console.log("id " + id)
-        service.deleteWatchlistPost(id)
-            .then(res => {
-                if(res) {
-                    toast.success("Post was removed from your watchlist!")
-                    router.push('/')
-                }
-                console.log(res)
-            }).catch(err => {
-                if(err) {
-                    console.log(err)
-                    toast.error("There was an error removing post from your watchlist, please try again later.")
-                }
-            })
-
+        emit("delete-watchlist-post", id)
+       
     }
 
 
         return {
-            handleUnwatch
+            handleUnwatch, id
         }
   }
   

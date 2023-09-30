@@ -16,7 +16,7 @@
           <div class="row mt-5">
             <div class="col-md-4 mb-2 search-result-container">
               <div class="mb-2" v-for="post in watchlistedPosts" :key="post.postId">
-                <PostCardWatchlist :post="post" />
+                <PostCardWatchlist :post="post" @delete-watchlist-post="handleUnwatch(post.postId)"/>
               </div>
             </div>
           </div>
@@ -28,15 +28,35 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import service from '../services/ApiService';
+import { onMounted,watch, ref } from 'vue'
+import service from '../services/ApiService'
+import { useToast } from "vue-toastification";
 
 export default {
     setup() {
         const watchlistedPosts = ref(null);
-        const route = useRoute();
+        const toast = useToast();
         const loading = ref(true);
+
+        const handleUnwatch = (id) => {
+          console.log("emitted " + id)
+
+          service.deleteWatchlistPost(id)
+              .then(res => {
+                  if(res) {
+                    toast.success("Post was removed from your watchlist!")
+
+                    watchlistedPosts.value = watchlistedPosts.value.filter(w => w.postId !== id)                      
+                  }
+                  console.log(res)
+              }).catch(err => {
+                  if(err) {
+                      console.log(err)
+                      toast.error("There was an error removing post from your watchlist, please try again later.")
+                  }
+              })
+
+        }
 
 
         onMounted(async () => {
@@ -50,7 +70,7 @@ export default {
         })
 
         return {
-            watchlistedPosts, loading
+            watchlistedPosts, loading, handleUnwatch
         }
         
     }

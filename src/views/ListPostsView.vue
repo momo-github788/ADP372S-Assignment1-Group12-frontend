@@ -74,8 +74,9 @@ export default {
         posts.value = await service.getAll('post', 'search', null);
         loading.value = false;
       }
-      // console.log("posts")
-      // console.log(posts.value)
+      console.log("posts")
+      console.log(posts.value)
+      
 
 
     })

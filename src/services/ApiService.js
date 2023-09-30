@@ -131,6 +131,17 @@ class ApiService {
     }
   }
 
+  async getWatchlistedPostByPostId(postId) {
+    try {
+      const response = await axios.get(`${BASE_URL}/watchlist/read/${postId}`)
+      return response.data
+    } catch (error) {
+      // Handle errors here
+      throw new Error(error.response.data)
+    }
+  }
+
+
   async deleteWatchlistPost(postId) {
     try {
       const response = await axios.delete(`${BASE_URL}/watchlist/delete/${postId}`)
