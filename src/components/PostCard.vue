@@ -11,21 +11,21 @@
             <p class="card-text">{{post.description}}</p>
             
             <router-link id="primary-btn" class="btn mb-2" style="margin-right: .2rem" :to="{name: 'post', params: {id: post.postId}}">
-                View <i class="bi bi-eye"></i>
+                View
             </router-link>
 
             <router-link id="secondary-btn" class="btn mb-2" style="margin-right: .2rem" :to="{name: 'edit-post', params: {id: post.postId}}">
-                Edit <i class="bi bi-file-earmark-text"></i>
+                Edit 
             </router-link>
 
-            <button id="tertiary-btn" class="btn mb-2" style="margin-right: .2rem" @click="handleDelete">Delete <i class="bi bi-trash"></i></button>
+            <button id="tertiary-btn" class="btn mb-2" style="margin-right: .2rem" @click="handleDelete">Delete</button>
 
-            <div v-if="isWatchlisted">
-                <button id="secondary-btn" style="background-color: red;" class="btn mb-2"  @click="handleWatchlist">Unwatch</button>
-            </div>
-            <div v-else>
+            <span v-if="isWatchlisted">
+                <button id="secondary-btn" style="background-color: red;" class="btn mb-2" @click="handleWatchlist">Unwatch</button>
+            </span>
+            <span v-else>
                 <button id="primary-btn" style="background-color: green;" class="btn mb-2"  @click="handleWatchlist">Watch</button>
-            </div>
+            </span>
 
             
             <br/>
@@ -38,7 +38,7 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import service from '../services/ApiService';
+import watchlistPostService from '../services/WatchlistPostService';
 export default {
   props: ['post'],
   setup(props, {emit}) {
@@ -56,7 +56,7 @@ export default {
     }
 
     onMounted(async () => {
-        const status = await service.getWatchlistedPostByPostId(id);
+        const status = await watchlistPostService.getWatchlistedPostByPostId(id);
 
         if(status != null) {
             console.log("is watchlist")
@@ -68,49 +68,25 @@ export default {
     })
 
         const handleWatchlist = async () => {
-            console.log("id " + id)
-
-            await service.getWatchlistedPostByPostId(id)
-                .then(r => {
-                    console.log("suc")
-                    console.log(r)
-                    console.log("must delete wtchlst")
-                    service.deleteWatchlistPost(id)
-                        .then(res => {
-                            if(res) {
-                                toast.success("Post was removed from your watchlist!")                
-                            }
-                            console.log(res)
-                        }).catch(err => {
-                            if(err) {
-                                console.log(err)
-                                toast.error("There was an error removing post from your watchlist, please try again later.")
-                            }
-                        })
-                }).catch(e => {
-                    console.log("er")
-                    console.log(e)
-                    console.log("must addto wtachlist")
-                    service.createWatchlist(id)
-                    .then(res => {
-                        toast.success("Post was added to your watchlist!")
-                        console.log(res)
-                        
-                        //router.push('/');
-                    }).catch(err => {
-                        console.log(err)
-                        toast.error("There was an error adding post to your watchlist, please try again later.")
-                    })
+            // get Single WWatchlisted Post
+            await watchlistPostService.getWatchlistedPostByPostId(id).then(res => {
+                // If we find a Watchlisted Post, then delete and set isWatchlisted to false 
+                watchlistPostService.deleteWatchlistPost(id).then(res => {
+                    toast.warning("Post was removed from your watchlist!")      
+                    isWatchlisted.value = false;     
+                }).catch(err => { // else display error
+                    toast.error("There was an error removing post from your watchlist, please try again later.")
                 })
-        
-            // if(status!=null) {
-
-            // } else {
-
-            // }
-
-        
-    
+            }).catch(err => {
+                // If we DON'T find a Watchlisted Post,it will enter the catch block
+                // Here we can add this post / create a watchlist for the post and set isWatchlisted to true 
+                watchlistPostService.createWatchlist(id).then(res => {
+                    toast.success("Post was added to your watchlist!")
+                    isWatchlisted.value = true;
+                }).catch(err => {
+                    toast.error("There was an error adding post to your watchlist, please try again later.")
+                })
+            })
 
         }
 

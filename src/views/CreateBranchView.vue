@@ -52,7 +52,7 @@
 
 <script>
 import { ref, watch } from 'vue';
-import service from '../services/ApiService'
+import service from '../services/CRUDService'
 import { useToast } from "vue-toastification";
 import { useRouter } from 'vue-router';
 

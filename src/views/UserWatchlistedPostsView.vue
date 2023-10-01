@@ -29,7 +29,7 @@
 
 <script>
 import { onMounted,watch, ref } from 'vue'
-import service from '../services/ApiService'
+import watchlistPostService from '../services/WatchlistPostService'
 import { useToast } from "vue-toastification";
 
 export default {
@@ -41,7 +41,7 @@ export default {
         const handleUnwatch = (id) => {
           console.log("emitted " + id)
 
-          service.deleteWatchlistPost(id)
+          watchlistPostService.deleteWatchlistPost(id)
               .then(res => {
                   if(res) {
                     toast.success("Post was removed from your watchlist!")
@@ -63,7 +63,7 @@ export default {
           console.log("mouning")
             loading.value = false;
 
-            watchlistedPosts.value = await service.getAllWatchlistedPosts();
+            watchlistedPosts.value = await watchlistPostService.getAllWatchlistedPosts();
           
             console.log("watchlistedPosts")
             console.log(watchlistedPosts.value)

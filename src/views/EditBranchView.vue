@@ -61,7 +61,7 @@
 <script>
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import service from '../services/ApiService';
+import crudService from '../services/CRUDService';
 import { useToast } from "vue-toastification";
 
 export default {
@@ -81,7 +81,7 @@ export default {
 
             // id of the given branch
             const id = route.params.id;
-            branch.value = await service.getById('branch', id);
+            branch.value = await crudService.getById('branch', id);
 
             watch(branch.value, (newVal, oldVal) => {
                 console.log("watching..")
@@ -111,7 +111,7 @@ export default {
                 return;
             }
 
-            await service.update('branch', branch.value)
+            await crudService.update('branch', branch.value)
                 .then(res => {
                     if(res) {
                         toast.success("Branch updated successfully!")

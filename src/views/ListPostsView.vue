@@ -38,7 +38,7 @@
 <script>
 import { onMounted, ref } from 'vue'
 import { useToast } from "vue-toastification";
-import service from '../services/ApiService'
+import crudService from '../services/CRUDService'
 import { useRoute } from 'vue-router'
 
 export default {
@@ -50,7 +50,7 @@ export default {
 
     const handleDelete = (id) => {
       console.log("id " + id)
-        service.delete('post', id)
+      crudService.delete('post', id)
             .then(res => {
               if(res) {
                 posts.value = posts.value.filter(p => p.postId !== id)
@@ -68,10 +68,10 @@ export default {
       const title = route.query.title;
 
       if(title && title != null) {
-        posts.value = await service.getAll('post', 'search', title);
+        posts.value = await crudService.getAll('post', 'search', title);
         loading.value = false;
       } else {
-        posts.value = await service.getAll('post', 'search', null);
+        posts.value = await crudService.getAll('post', 'search', null);
         loading.value = false;
       }
       console.log("posts")

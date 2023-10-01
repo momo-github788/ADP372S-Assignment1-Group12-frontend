@@ -110,7 +110,8 @@
 
 <script>
 import { ref, watch, onMounted } from 'vue';
-import service from '../services/ApiService';
+import crudService from '../services/CRUDService';
+import postService from '../services/PostService';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
 
@@ -165,7 +166,7 @@ export default {
     }
 
     onMounted(async () => {
-      branches.value = await service.getAll('branch', 'all', null);
+      branches.value = await crudService.getAll('branch', 'all', null);
 
     })
 
@@ -189,7 +190,7 @@ export default {
       console.log(post.value)
       console.log(selectedImage.value)
       
-      await service.createOrUpdatePost('create', post.value, selectedImage.value).then(res => {
+      await postService.createOrUpdatePost('create', post.value, selectedImage.value).then(res => {
 
           if(res) {
                   console.log("create success")

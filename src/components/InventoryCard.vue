@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import service from '../services/ApiService'
+import vehicleInventoryService from '../services/VehicleInventoryService'
 import { useToast } from "vue-toastification";
 import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import {colorShades, getRandomColor} from '../utils/Colors.js'
+import { getRandomColor} from '../utils/Colors.js'
 
 export default {
     props: ['inventory'],
@@ -51,7 +51,7 @@ export default {
         onMounted(async() => {
             //console.log("getting all by id " + inventoryId)
             
-            vehicles.value = await service.getAllVehiclesByInventoryId(id);
+            vehicles.value = await vehicleInventoryService.getAllVehiclesByInventoryId(id);
             //console.log(vehicles.value)
         })
   
@@ -62,10 +62,10 @@ export default {
   
 
         const handleDeleteVehicle = (vehicleId) => {
+            console.log("click delete vehic,e")
 
 
-            console.log(first)
-            service.deleteVehicleFromInventory(id, vehicleId)
+            vehicleInventoryService.deleteVehicleFromInventory(id, vehicleId)
                 .then(res => {
                     console.log(res)
                     if(res) {

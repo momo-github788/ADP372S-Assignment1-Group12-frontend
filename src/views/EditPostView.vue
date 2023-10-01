@@ -130,7 +130,8 @@
 <script>
 import { onMounted, ref, watch} from 'vue'
 
-import service from '../services/ApiService';
+import crudService from '../services/CRUDService';
+import postService from '../services/PostService';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
 
@@ -168,8 +169,8 @@ export default {
 
     onMounted(async () => {
       const id = route.params.id;
-      branches.value = await service.getAll('branch', 'all', null);
-      post.value = await service.getById('post', id);      
+      branches.value = await crudService.getAll('branch', 'all', null);
+      post.value = await crudService.getById('post', id);      
     
       watch(post.value, (newVal, oldVal) => {
         validatePost(newVal)
@@ -190,7 +191,7 @@ export default {
 
     const handleImageUploadDelete = async () => {
       console.log("handleImageUploadDelete")
-      await service.deleteImageUpload(post.value.imageUpload.id)
+      await crudService.deleteImageUpload(post.value.imageUpload.id)
         .then(res => {
           console.log("success")
 
@@ -221,7 +222,7 @@ export default {
       console.log(`imageToUpload`)
       console.log(imageToUpload)
 
-      await service.createOrUpdatePost('update', post.value, imageToUpload)
+      await postService.createOrUpdatePost('update', post.value, imageToUpload)
           .then(res => {
             console.log(res)
               if(res) {

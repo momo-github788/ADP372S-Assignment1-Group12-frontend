@@ -37,7 +37,7 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import service from '../services/ApiService'
+import crudService from '../services/CRUDService'
 import { useToast } from 'vue-toastification';
 
 export default {
@@ -48,7 +48,7 @@ export default {
     const toast = useToast();
 
     const handleDelete = (id) => {
-      service.delete('inventory', id)
+      crudService.delete('inventory', id)
                 .then(res => {
                     if(res) {
                         toast.success("Inventory deleted successfully!")
@@ -67,7 +67,7 @@ export default {
 
   
       //console.log(await service.getAllVehiclesByInventoryId(1))
-      inventories.value = await service.getAll('inventory', 'all', null);
+      inventories.value = await crudService.getAll('inventory', 'all', null);
       //vehicles.value = await service.getAllVehiclesByInventoryId()
       loading.value = false;
       

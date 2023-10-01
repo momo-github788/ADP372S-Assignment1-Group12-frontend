@@ -58,7 +58,7 @@
 <script>
 import { onMounted, ref } from 'vue'
 
-import service from '../services/ApiService'
+import crudService from '../services/CRUDService'
 import { useRoute } from 'vue-router'
 export default {
   setup() {
@@ -68,8 +68,7 @@ export default {
 
     onMounted(async () => {
       const id = route.params.id
-      await service
-        .getById('post', id)
+      await crudService.getById('post', id)
         .then((res) => {
           console.log(res)
           post.value = res

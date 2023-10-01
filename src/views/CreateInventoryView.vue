@@ -45,7 +45,9 @@
 
 <script>
 import { onMounted, ref, watch } from 'vue';
-import service from '../services/ApiService'
+import crudService from '../services/CRUDService'
+import vehicleInventoryService from '../services/VehicleInventoryService'
+
 import { useToast } from "vue-toastification";
 import { useRouter } from 'vue-router';
 
@@ -80,7 +82,7 @@ export default {
 
         onMounted(async () => {
             
-            branches.value = await service.getAll('branch', 'all', null);
+            branches.value = await crudService.getAll('branch', 'all', null);
 
         })
 
@@ -88,7 +90,7 @@ export default {
             let type = event.target.value;
             console.log("condition: " + type)
 
-            let filteredVehicles = await service.getAll('vehicle', 'all', null);
+            let filteredVehicles = await crudService.getAll('vehicle', 'all', null);
 
             if(type === "NEW") {
                 vehicles.value = filteredVehicles.filter(v => v.condition === "NEW");
@@ -121,7 +123,7 @@ export default {
 
             
             // create inventory
-            await service.create('inventory', inventory.value)
+            await crudService.create('inventory', inventory.value)
                 .then(res => {
                     if(res) {
                         toast.success("Inventory created successfully!", {timeout: 3000})
@@ -129,7 +131,7 @@ export default {
                         console.log("selected vehicle")
                         console.log(vehicleId)
                         // add vehicle to newly created inventory
-                        service.createVehicleInventory(res.inventoryId, vehicleId.value)
+                        vehicleInventoryService.createVehicleInventory(res.inventoryId, vehicleId.value)
                             .then(res => {
                                 toast.success("Vehicle added to inventory", {timeout: 3000})
                                 console.log("create vehicle inv")

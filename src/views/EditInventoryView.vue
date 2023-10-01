@@ -36,12 +36,6 @@
                     </select>
                 </div>
 
-                <!-- <div>
-                    <MultiSelect v-model="selectedOptions" :options="options" :multiple="true" :close-on-select="false" 
-                    placeholder="Pick some" label="name" track-by="name"/>
-                    <MultiSelect :v-model="selectedOptions" :options="options"/>
-                </div> -->
-
                 <!-- Submit Button -->
                 <button class="btn btn-primary">Update</button>
 
@@ -56,16 +50,14 @@
 
 <script>
 import { onMounted, ref, watch } from 'vue';
-import MultiSelect from '../components/MultiSelectComponent.vue';
 import { useRoute, useRouter } from 'vue-router';
-import service from '../services/ApiService';
+import crudService from '../services/CRUDService';
+import vehicleInventoryService from '../services/VehicleInventoryService';
+
 import { useToast } from "vue-toastification";
 
 export default {
 
-    components: {
-        MultiSelect
-    },
     setup() {
         const inventory = ref(null);
         const route = useRoute();
@@ -91,15 +83,15 @@ export default {
         onMounted(async () => {
             // id of the given branch
 
-            inventory.value = await service.getById('inventory', inventoryId);
+            inventory.value = await crudService.getById('inventory', inventoryId);
 
             // only show vehicles for this inventory type.. inventory type is disabled and can't be changed
-            await service.getAll('vehicle', 'all', null)
+            await crudService.getAll('vehicle', 'all', null)
                 .then(res => {
                     vehicles.value = res.filter(v => v.condition === inventory.value.inventoryType)
                 })
             
-            branches.value = await service.getAll('branch', 'all', null);
+            branches.value = await crudService.getAll('branch', 'all', null);
             
             //options.value = vehicles.value.map(v => v.make + " " + v.model + " " + v.year);
 
@@ -120,7 +112,7 @@ export default {
                 return;
             }
 
-            await service.update('inventory', inventory.value)
+            await crudService.update('inventory', inventory.value)
                 .then(res => {
                 if (res) {
                     toast.success("Inventory updated successfully!");
@@ -130,7 +122,7 @@ export default {
                     console.log("selected vehicle")
                         console.log(vehicleId)
                         // add vehicle to newly created inventory
-                        service.createVehicleInventory(res.inventoryId, vehicleId.value)
+                        vehicleInventoryService.createVehicleInventory(res.inventoryId, vehicleId.value)
                             .then(res => {
                                 toast.success("Vehicle added to inventory", {timeout: 3000})
                                 console.log("create vehicle inv")

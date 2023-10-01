@@ -38,7 +38,7 @@
 
 <script>
 import { onMounted,watch, ref } from 'vue'
-import service from '../services/ApiService'
+import crudService from '../services/CRUDService'
 import { useToast } from "vue-toastification";
 
 
@@ -50,7 +50,7 @@ export default {
    
     const handleDelete = (id) => {
       console.log("emitted " + id)
-      service.delete('branch', id)
+      crudService.delete('branch', id)
         .then(res => {
             if(res) {
                 toast.success("Branch deleted successfully!")
@@ -68,7 +68,7 @@ export default {
 
     onMounted(async () => {
      
-      branches.value = await service.getAll('branch', 'all', null);
+      branches.value = await crudService.getAll('branch', 'all', null);
       loading.value = false;
 
       watch(branches.value, (newVal, oldVal) => {

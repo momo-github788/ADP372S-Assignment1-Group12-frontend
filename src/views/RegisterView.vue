@@ -32,7 +32,7 @@
 
 <script>
 import { ref, watch } from 'vue'
-import service from '../services/ApiService'
+import authService from '../services/AuthService'
 export default {
     setup() {
         const user = ref({
@@ -62,7 +62,7 @@ export default {
         })
 
         const handleSubmit = async () => {
-            const result = await service.create('user', user.value);
+            const result = await authService.register('user', user.value);
             console.log(result)
         }
 
