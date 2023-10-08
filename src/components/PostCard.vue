@@ -10,35 +10,38 @@
             <h5 class="card-title">{{post.title}}</h5>
             <p class="card-text">{{post.description}}</p>
             
+   
             <router-link id="primary-btn" class="btn mb-2" style="margin-right: .2rem" :to="{name: 'post', params: {id: post.postId}}">
                 View
             </router-link>
 
-            <router-link id="secondary-btn" class="btn mb-2" style="margin-right: .2rem" :to="{name: 'edit-post', params: {id: post.postId}}">
-                Edit 
-            </router-link>
+            <span v-if="isAdmin">
+                <router-link id="secondary-btn" class="btn mb-2" style="margin-right: .2rem" :to="{name: 'edit-post', params: {id: post.postId}}">
+                    Edit 
+                </router-link>
 
-            <button id="tertiary-btn" class="btn mb-2" style="margin-right: .2rem" @click="handleDelete">Delete</button>
+                <button id="tertiary-btn" class="btn mb-2" style="margin-right: .2rem" @click="handleDelete">Delete</button>
 
-            <span v-if="isWatchlisted">
-                <button id="secondary-btn" style="background-color: red;" class="btn mb-2" @click="handleWatchlist">Unwatch</button>
+                <span v-if="isWatchlisted">
+                    <button id="secondary-btn" style="background-color: red;" class="btn mb-2" @click="handleWatchlist">Unwatch</button>
+                </span>
+                <span v-else>
+                    <button id="primary-btn" style="background-color: green;" class="btn mb-2"  @click="handleWatchlist">Watch</button>
+                </span>
             </span>
-            <span v-else>
-                <button id="primary-btn" style="background-color: green;" class="btn mb-2"  @click="handleWatchlist">Watch</button>
-            </span>
-
             
             <br/>
-            <span>{{post.createdAt}}</span>
+            <span>Created on {{formattedDate}}</span>
         </div>
     </div>
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import watchlistPostService from '../services/WatchlistPostService';
+import authService from '../services/AuthService';
 export default {
   props: ['post'],
   setup(props, {emit}) {
@@ -46,13 +49,35 @@ export default {
     const id = props.post.postId;
     const toast = useToast();
     const router = useRouter();
-
     const isWatchlisted = ref(null);
+    const isAdmin = ref(false);
+    const isUser = ref(false);
+    
+    onMounted(() => {
+        const user = authService.getCurrentUserJwt();
+
+        if(user) {
+            // Get all user roles from token
+            const roles = user.authorities.map(a => a.authority);
+            // Check if user has an admin role , returns a boolean
+            isAdmin.value = roles.some(role => role === "ADMIN");
+            // Check if user has a user role , returns a boolean
+            isUser.value = roles.some(role => role === "USER")
+
+            console.log("is admin: " + isAdmin.value)
+            console.log("is user: " + isUser.value)
+        }
+    })
+
+
+    const formattedDate = computed(() => {
+        var date = new Date(props.post.createdAt);
+        return date.toString().substring(0, 15);
+    });
+
 
     const handleDelete = () => {
         emit("delete-post", id)
-       
-
     }
 
     onMounted(async () => {
@@ -92,7 +117,7 @@ export default {
 
 
         return {
-            handleDelete, handleWatchlist, id,isWatchlisted
+            handleDelete, handleWatchlist, id,isWatchlisted, isUser, isAdmin, formattedDate
         }
   }
   

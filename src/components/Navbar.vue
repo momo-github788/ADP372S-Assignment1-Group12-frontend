@@ -7,13 +7,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      
             <li class="nav-item dropdown">
             <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Posts</a>
             <ul class="dropdown-menu">
                 <router-link class="dropdown-item text-dark" :to="{ name: 'posts' }">All posts</router-link>
-                <router-link class="dropdown-item text-dark" :to="{ name: 'employee-posts'}">My posts</router-link>
-                <router-link class="dropdown-item text-dark" :to="{ name: 'watchlisted' }">Watchlisted Posts</router-link>
-                <router-link class="dropdown-item text-dark" :to="{ name: 'create-post' }">Create a post</router-link>
+
+                <div v-if="auth">
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'employee-posts'}">My posts</router-link>
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'watchlisted' }">Watchlisted Posts</router-link>
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'create-post' }">Create a post</router-link>
+                </div>
+     
             </ul>
             </li>
     
@@ -21,7 +26,9 @@
             <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Branches</a>
             <ul class="dropdown-menu">
                 <router-link class="dropdown-item text-dark" :to="{ name: 'branches' }">All branches</router-link>
-                <router-link class="dropdown-item text-dark" :to="{ name: 'create-branch' }">Create a branch</router-link>
+                <div v-if="auth">
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'create-branch' }">Create a branch</router-link>
+                </div>
             </ul>
             </li>
 
@@ -29,15 +36,25 @@
             <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Inventory</a>
             <ul class="dropdown-menu">
                 <router-link class="dropdown-item text-dark" :to="{ name: 'inventories' }">All Inventories</router-link>
-                <router-link class="dropdown-item text-dark" :to="{ name: 'create-inventory' }">Create an inventory</router-link>
+                <div v-if="auth">
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'create-inventory' }">Create an inventory</router-link>
+                </div>
             </ul>
             </li>
         </ul>
     
     
         <form class="d-flex nav-register-login">
-            <router-link class="btn btn-primary" style="margin-right:1rem" :to="{ name: 'register' }">Register</router-link>
-            <router-link class="btn btn-secondary" :to="{ name: 'login' }">Login</router-link>
+            <div v-if="auth">
+                <button @click="logout" class="btn btn-primary" >
+                    Logout
+                </button>
+            </div>
+            <div v-else>
+                <router-link class="btn btn-primary" style="margin-right:1rem" :to="{ name: 'register' }">Register</router-link>
+                <router-link class="btn btn-secondary" :to="{ name: 'login' }">Login</router-link>
+            </div>
+      
         </form>
     
         </div>
@@ -46,8 +63,36 @@
 </template>
 
 <script>
+import { onMounted, ref } from 'vue';
+import authService from '../services/AuthService';
+import { useRoute, useRouter } from 'vue-router';
 export default {
 
+    setup() {
+        const auth = ref(false);
+        const router = useRouter();
+        
+        onMounted(() => {
+           const user = authService.getCurrentUserJwt();
+
+           if(user) {
+            const authorities = user.authorities.map(a => a.authority);
+
+            auth.value = true;
+           } else {
+                console.log("d")
+           }
+        })
+
+        const logout = () => {
+            authService.logout();
+            router.push("/login")
+        }
+
+        return {
+            auth, logout
+        }
+    }
 };
 </script>
 

@@ -5,6 +5,19 @@ const BASE_URL = 'http://localhost:8080/post'
 
 class PostService {
 
+  async getAllEmployeePosts() {
+    try {
+      const response = await axios.get(`${BASE_URL}/all/employee`)
+      console.log("employee post")
+      console.log(response)
+      return response.data
+    } catch (error) {
+      // Handle errors here
+      console.error('Error fetching results:', error)
+      throw new Error(error.response.data.message)
+    }
+  }
+
 
     async createOrUpdatePost(action, body, image) {
         console.log("action " + action)

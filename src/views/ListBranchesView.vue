@@ -8,9 +8,12 @@
         <div v-if="!loading">
            <h1 class="fw-bold">All Branches</h1>
 
-          <router-link to="create-branch">
-            <button class="btn btn-primary">Create a Branch</button>
-          </router-link>
+           <div v-if="auth">
+            <router-link to="create-branch">
+              <button class="btn btn-primary">Create a Branch</button>
+            </router-link>
+           </div>
+
            
         </div>
 
@@ -40,6 +43,7 @@
 import { onMounted,watch, ref } from 'vue'
 import crudService from '../services/CRUDService'
 import { useToast } from "vue-toastification";
+import authService from '../services/AuthService';
 
 
 export default {
@@ -47,6 +51,7 @@ export default {
     const branches = ref(null);
     const loading = ref(true);
     const toast = useToast();
+    const auth = ref(false);
    
     const handleDelete = (id) => {
       console.log("emitted " + id)
@@ -67,6 +72,16 @@ export default {
     }
 
     onMounted(async () => {
+
+      const user = authService.getCurrentUserJwt();
+
+      if(user) {
+        const authorities = user.authorities.map(a => a.authority);
+        console.log(authorities);
+        auth.value = true;
+      } else {
+          console.log("d")
+      }
      
       branches.value = await crudService.getAll('branch', 'all', null);
       loading.value = false;

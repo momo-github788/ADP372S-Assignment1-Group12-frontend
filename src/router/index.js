@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import CreateBranchView from '../views/CreateBranchView.vue'
 import EditBranchView from '../views/EditBranchView.vue'
 import ListBranchesView from '../views/ListBranchesView.vue'
+import { useToast } from "vue-toastification";
 
 import CreateInventoryView from '../views/CreateInventoryView.vue'
 import ListInventoriesView from '../views/ListInventoriesView.vue'
@@ -19,6 +20,7 @@ import RegisterView from '../views/RegisterView.vue'
 import LoginView from '../views/LoginView.vue'
 import UserWatchlistedPostsView from '../views/UserWatchlistedPostsView.vue'
 import EmployeeListPostsView from '../views/EmployeeListPostsView.vue'
+import authService from '../services/AuthService';
 
 
 const router = createRouter({
@@ -37,22 +39,26 @@ const router = createRouter({
     {
       path: '/create-branch',
       name: 'create-branch',
-      component: CreateBranchView
+      component: CreateBranchView,
+      meta: {requiresAuth: true}
     },
     {
       path: '/edit-branch/:id',
       name: 'edit-branch',
-      component: EditBranchView
+      component: EditBranchView,
+      meta: {requiresAuth: true}
     },
     {
       path: '/create-inventory',
       name: 'create-inventory',
-      component: CreateInventoryView
+      component: CreateInventoryView,
+      meta: {requiresAuth: true}
     },
     {
       path: '/edit-inventory/:id',
       name: 'edit-inventory',
-      component: EditInventoryView
+      component: EditInventoryView,
+      meta: {requiresAuth: true}
     },
     {
       path: '/inventories',
@@ -62,12 +68,14 @@ const router = createRouter({
     {
       path: '/create-post',
       name: 'create-post',
-      component: CreatePostView
+      component: CreatePostView,
+      meta: {requiresAuth: true}
     },
     {
       path: '/edit-post/:id',
       name: 'edit-post',
-      component: EditPostView
+      component: EditPostView,
+      meta: {requiresAuth: true}
     },
     {
       path: '/posts',
@@ -82,7 +90,8 @@ const router = createRouter({
     {
       path: '/watchlisted',
       name: 'watchlisted',
-      component: UserWatchlistedPostsView
+      component: UserWatchlistedPostsView,
+      meta: {requiresAuth: true}
     },
     {
       path: '/register',
@@ -97,9 +106,29 @@ const router = createRouter({
     {
       path: '/employee-posts',
       name: 'employee-posts',
-      component: EmployeeListPostsView
+      component: EmployeeListPostsView,
+      meta: {requiresAuth: true}
+    },
+    {
+      path: "/:catchAll(.*)",
+      name: "NotFound",
+      component: () => import ('../views/NotFoundView.vue')
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+
+  if(to.matched.some(r => r.meta.requiresAuth)) {
+    const user = authService.getCurrentUserJwt();
+    const toast = useToast();
+
+    if(!user) {
+      toast.info("You are not allowed to access this resource.")
+      next('/login')
+    }
+  }
+  next();
 })
 
 export default router

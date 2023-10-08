@@ -70,7 +70,7 @@ export default {
       const id = route.params.id
       await crudService.getById('post', id)
         .then((res) => {
-          console.log(res)
+          //console.log(res)
           post.value = res
         })
         .catch((err) => {

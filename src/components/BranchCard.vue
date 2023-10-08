@@ -16,23 +16,42 @@
 
             <br/>
 
-            
-            <router-link id="secondary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" :to="{name: 'edit-branch', params: {id: branch.branchId}}">
-                Edit <i class="bi bi-file-earmark-text"></i>
-            </router-link>
+            <div v-if="isAdmin">
+                <router-link id="secondary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" :to="{name: 'edit-branch', params: {id: branch.branchId}}">
+                    Edit <i class="bi bi-file-earmark-text"></i>
+                </router-link>
+
+                <button id="tertiary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" @click="handleDelete">Delete <i class="bi bi-trash"></i></button>
+
+            </div>
+
 
             
-            <button id="tertiary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" @click="handleDelete">Delete <i class="bi bi-trash"></i></button>
         </div>
     </div>
 </template>
 
 <script>
+import { onMounted, ref } from 'vue';
+import authService from '../services/AuthService';
 export default {
     props: ['branch'],
 
     setup(props, {emit}) {
         const id = props.branch.branchId;
+    
+        const isAdmin = ref(false);
+        const isUser = ref(false);
+        
+        onMounted(() => {
+            const user = authService.getCurrentUserJwt();
+
+            if(user) {
+                const roles = user.authorities.map(a => a.authority);
+                isAdmin.value = roles.some(role => role === "ADMIN");
+                isUser.value = roles.some(role => role === "USER")
+            }
+        })
   
         const handleDelete = () => {
             emit("delete-branch", id)
@@ -40,7 +59,7 @@ export default {
 
 
         return {
-            handleDelete, id
+            handleDelete, id, isAdmin, isUser
         }
     }
 }

@@ -31,7 +31,7 @@
 
 <script>
 import { onMounted, ref } from 'vue';
-import crudService from '../services/CRUDService';
+import postService from '../services/PostService';
 export default {
  // props: ['posts'],
   setup() {
@@ -43,7 +43,13 @@ export default {
 
           // delay fetching results by a bit to show loading state
           setTimeout(async () => {    
-              posts.value = await crudService.getAll('post', 'search', null);
+              posts.value = await postService.getAllEmployeePosts().then(res => {
+                console.log("res")
+                console.log(res)
+              }).catch(err => {
+                console.log("err")
+                console.log(err)
+              })
               loading.value = false;
               console.log("posts")
               console.log(posts.value)

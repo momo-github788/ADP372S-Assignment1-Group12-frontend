@@ -23,10 +23,14 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import authService from '../services/AuthService';
+import { useToast } from "vue-toastification";
+
 export default {
     setup() {
+        const toast = useToast();
         const router = useRouter();
 
         const user = ref({
@@ -40,19 +44,41 @@ export default {
 
 
         const handleSubmit = () => {
-            console.log(formData.value);
+            console.log(user.value);
+
+            authService.login(user.value).then(res => {
+
+                if(res) {
+                    toast.success("Login successful")
+                    setTimeout(() => {
+                        router.push("/")
+                    }, 1500)
+                }
+             
+            }).catch(err => {
+                toast.error("Invalid credentials")
+            })
             
-            user.value.emailAddress === "" ? errors['emailAddress'] = "Please enter a value" : errors['emailAddress'] = "";
-            user.value.password === "" ? errors['password'] = "Please enter a value" : errors['password'] = "";
-
-
-            if((formData.value.emailAddress === "admin@gmail.com") && (formData.value.password === "password")) {
-                router.push("/");
-                console.log("success");
-            }
         }
 
-        return { user, handleSubmit, isLoading, errors };
+        const validate = (value) => {
+            value.emailAddress === '' ? errors.value['emailAddress'] =  "Required" : errors.value['emailAddress'] =  ""
+            value.password.length < 6 ? errors.value['password'] =  "Minimum of 6 characters" : errors.value['password'] =  ""
+
+            console.log(errors.value)
+        }
+
+        // This runs everytime a change is made to user object, can make validation here to show in real time ..
+        watch(user.value, (newVal,oldVal) => {
+            console.log("in watch")
+            validate(newVal);
+
+            if(errors.value) {
+                return;
+            }
+        })
+
+        return { user, handleSubmit, isLoading, errors, validate };
         
     }
 
