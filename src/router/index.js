@@ -21,6 +21,7 @@ import LoginView from '../views/LoginView.vue'
 import UserWatchlistedPostsView from '../views/UserWatchlistedPostsView.vue'
 import EmployeeListPostsView from '../views/EmployeeListPostsView.vue'
 import authService from '../services/AuthService';
+import { store } from '../store/Store';
 
 
 const router = createRouter({
@@ -91,7 +92,7 @@ const router = createRouter({
       path: '/watchlisted',
       name: 'watchlisted',
       component: UserWatchlistedPostsView,
-      meta: {requiresAuth: true}
+      meta: {requiresAuth: true, requiresUser: true}
     },
     {
       path: '/register',
@@ -117,15 +118,20 @@ const router = createRouter({
   ]
 })
 
+
+// Make sure each time that a user is authenticated before accessing specific views on frontend
 router.beforeEach((to, from, next) => {
 
-  if(to.matched.some(r => r.meta.requiresAuth)) {
+  if(to.matched.some(r => r.meta.requiresAuth) && to.matched.some(r => r.meta.requiresUser)) {
     const user = authService.getCurrentUserJwt();
     const toast = useToast();
 
+    const isUser = store.isUser;
+    const isAdmin = store.isAdmin;
+
     if(!user) {
       toast.info("You are not allowed to access this resource.")
-      next('/login')
+      next('/login') // Redirect them to login page
     }
   }
   next();

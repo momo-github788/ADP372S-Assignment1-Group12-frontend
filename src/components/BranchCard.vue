@@ -33,24 +33,18 @@
 
 <script>
 import { onMounted, ref } from 'vue';
-import authService from '../services/AuthService';
+import { store } from '../store/Store';
 export default {
     props: ['branch'],
 
     setup(props, {emit}) {
         const id = props.branch.branchId;
-    
         const isAdmin = ref(false);
         const isUser = ref(false);
         
         onMounted(() => {
-            const user = authService.getCurrentUserJwt();
-
-            if(user) {
-                const roles = user.authorities.map(a => a.authority);
-                isAdmin.value = roles.some(role => role === "ADMIN");
-                isUser.value = roles.some(role => role === "USER")
-            }
+            isAdmin.value = store.isAdmin;
+            isUser.value = store.isUser;
         })
   
         const handleDelete = () => {

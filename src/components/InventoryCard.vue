@@ -18,13 +18,14 @@
                 </div>
             </div>
         
+            <div v-if="isAdmin">
+                <router-link id="secondary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" :to="{name: 'edit-inventory', params: {id: inventory.inventoryId}}">
+                    Edit <i class="bi bi-file-earmark-text"></i>
+                </router-link>
             
-            <router-link id="secondary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" :to="{name: 'edit-inventory', params: {id: inventory.inventoryId}}">
-                Edit <i class="bi bi-file-earmark-text"></i>
-            </router-link>
-
+                <button id="tertiary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" @click="handleDelete">Delete <i class="bi bi-trash"></i></button>
+            </div>
             
-            <button id="tertiary-btn" class="btn mb-2 mt-3" style="margin-right: .5rem" @click="handleDelete">Delete <i class="bi bi-trash"></i></button>
         </div>
     </div>
 </template>
@@ -35,6 +36,7 @@ import { useToast } from "vue-toastification";
 import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { getRandomColor} from '../utils/Colors.js'
+import authService from '../services/AuthService';
 
 export default {
     props: ['inventory'],
@@ -48,8 +50,17 @@ export default {
         const router = useRouter();
         const id = props.inventory.inventoryId;
 
+        const isAdmin = ref(false);
+        const isUser = ref(false);
+
         onMounted(async() => {
-            //console.log("getting all by id " + inventoryId)
+            const user = authService.getCurrentUserJwt();
+
+            if(user) {
+                const roles = user.authorities.map(a => a.authority);
+                isAdmin.value = roles.some(role => role === "ADMIN");
+                isUser.value = roles.some(role => role === "USER")
+            }
             
             vehicles.value = await vehicleInventoryService.getAllVehiclesByInventoryId(id);
             //console.log(vehicles.value)
@@ -85,7 +96,7 @@ export default {
 
 
         return {
-            handleDelete, toast, vehicles, handleDeleteVehicle, id, getRandomColor
+            handleDelete, toast, vehicles, handleDeleteVehicle, id, getRandomColor, isAdmin, isUser
         }
     }
 }

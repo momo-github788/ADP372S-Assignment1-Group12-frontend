@@ -19,17 +19,19 @@
                 <router-link id="secondary-btn" class="btn mb-2" style="margin-right: .2rem" :to="{name: 'edit-post', params: {id: post.postId}}">
                     Edit 
                 </router-link>
-
                 <button id="tertiary-btn" class="btn mb-2" style="margin-right: .2rem" @click="handleDelete">Delete</button>
-
+            </span>
+        
+            <span v-if="isUser">
                 <span v-if="isWatchlisted">
                     <button id="secondary-btn" style="background-color: red;" class="btn mb-2" @click="handleWatchlist">Unwatch</button>
                 </span>
                 <span v-else>
                     <button id="primary-btn" style="background-color: green;" class="btn mb-2"  @click="handleWatchlist">Watch</button>
-                </span>
+                </span> 
             </span>
-            
+
+        
             <br/>
             <span>Created on {{formattedDate}}</span>
         </div>
@@ -42,6 +44,7 @@ import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import watchlistPostService from '../services/WatchlistPostService';
 import authService from '../services/AuthService';
+import { store } from '../store/Store';
 export default {
   props: ['post'],
   setup(props, {emit}) {
@@ -57,12 +60,8 @@ export default {
         const user = authService.getCurrentUserJwt();
 
         if(user) {
-            // Get all user roles from token
-            const roles = user.authorities.map(a => a.authority);
-            // Check if user has an admin role , returns a boolean
-            isAdmin.value = roles.some(role => role === "ADMIN");
-            // Check if user has a user role , returns a boolean
-            isUser.value = roles.some(role => role === "USER")
+            isAdmin.value = store.isAdmin;
+            isUser.value = store.isUser;
 
             console.log("is admin: " + isAdmin.value)
             console.log("is user: " + isUser.value)
@@ -94,7 +93,7 @@ export default {
 
         const handleWatchlist = async () => {
             // get Single WWatchlisted Post
-            await watchlistPostService.getWatchlistedPostByPostId(id).then(res => {
+            watchlistPostService.getWatchlistedPostByPostId(id).then(res => {
                 // If we find a Watchlisted Post, then delete and set isWatchlisted to false 
                 watchlistPostService.deleteWatchlistPost(id).then(res => {
                     toast.warning("Post was removed from your watchlist!")      
