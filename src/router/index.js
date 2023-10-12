@@ -122,12 +122,12 @@ const router = createRouter({
 // Make sure each time that a user is authenticated before accessing specific views on frontend
 router.beforeEach((to, from, next) => {
 
-  if(to.matched.some(r => r.meta.requiresAuth) && to.matched.some(r => r.meta.requiresUser)) {
+  if(to.matched.some(r => r.meta.requiresAuth)) {
     const user = authService.getCurrentUserJwt();
     const toast = useToast();
 
-    const isUser = store.isUser;
-    const isAdmin = store.isAdmin;
+    // const isUser = store.isUser;
+    // const isAdmin = store.isAdmin;
 
     if(!user) {
       toast.info("You are not allowed to access this resource.")
