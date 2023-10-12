@@ -35,7 +35,7 @@ export default {
 
         const user = ref({
             emailAddress: '',
-            password: ''
+            password: 'password'
         });
 
         const isLoading = ref(false);
@@ -51,8 +51,8 @@ export default {
                 if(res) {
                     toast.success("Login successful")
                     setTimeout(() => {
-                        router.push("/")
-                    }, 1500)
+                        window.location.href = "/"
+                    }, 750)
                 }
              
             }).catch(err => {

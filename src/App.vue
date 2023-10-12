@@ -65,18 +65,21 @@ body .search-filter-container .search-results-container {
 
 }
 
-body .search-filter-container .search-results-container .search-result-container {
+body .search-filter-container .search-results-container .search-result-container,
+#landing-container .search-result-container {
 
     width: 100%;
 }
 
-body .search-results-container .search-result-container .post-card {
+body .search-results-container .search-result-container .post-card,
+#landing-container .search-result-container .post-card {
     display: flex;
     flex-direction: row;
 
 }
 
-body .search-results-container .search-result-container .post-card img {
+body .search-results-container .search-result-container .post-card img,
+#landing-container .search-result-container .post-card img {
     height: 175px;
 
 }

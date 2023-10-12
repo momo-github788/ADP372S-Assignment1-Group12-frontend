@@ -70,15 +70,6 @@ export default {
         const inventoryId = route.params.id;
 
 
-        let selectedOptions = ref([])
-        let options = ref({ name: 'Vue.js', language: 'JavaScript' },
-        { name: 'Adonis', language: 'JavaScript' },
-        { name: 'Rails', language: 'Ruby' },
-        { name: 'Sinatra', language: 'Ruby' },
-        { name: 'Laravel', language: 'PHP' },
-        { name: 'Phoenix', language: 'Elixir' })
-
-
         // perform code as soon as the component mounts (initialization etc)
         onMounted(async () => {
             // id of the given branch
@@ -142,7 +133,7 @@ export default {
             });
         };
         return {
-            inventory,  errors, validateInventory, handleSubmit, branches, vehicles, vehicleId, selectedOptions, options
+            inventory,  errors, validateInventory, handleSubmit, branches, vehicles, vehicleId
         };
     }
 }

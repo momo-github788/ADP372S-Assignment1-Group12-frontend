@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-6">
           <h1 class="fw-bold">{{ post.title }}</h1>
-          <p class="text-muted">Created on {{ post.createdAt }}</p>
+          <p class="text-muted">Created on {{ formattedDate }}</p>
           <p class="lead fw-bold">R {{ post.price }}</p>
           <p>{{ post.description }}</p>
 
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import crudService from '../services/CRUDService'
 import { useRoute } from 'vue-router'
@@ -65,6 +65,12 @@ export default {
     const post = ref(null)
 
     const route = useRoute()
+
+    const formattedDate = computed(() => {
+        var date = new Date(post.value.createdAt);
+        return date.toString().substring(0, 15);
+    });
+
 
     onMounted(async () => {
       const id = route.params.id
@@ -79,7 +85,7 @@ export default {
     })
 
     return {
-      post
+      post, formattedDate
     }
   }
 }

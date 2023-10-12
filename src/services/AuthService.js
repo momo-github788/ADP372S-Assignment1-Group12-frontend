@@ -37,7 +37,7 @@ class AuthService {
       console.log("request")
       console.log(request)
       try {
-          const response = await axios.post(`${BASE_URL}/login`, request);
+          const response = await axios.post(`${BASE_URL}/login?type=employee`, request);
           console.log(response)
           if(response) {
             console.log("setting local storgae..")
@@ -52,6 +52,7 @@ class AuthService {
 
     logout = () => {
       localStorage.removeItem("user");
+      window.location.href = "/"
     }
 
     getCurrentUserJwt  = () => {

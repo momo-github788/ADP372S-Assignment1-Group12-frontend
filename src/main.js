@@ -6,7 +6,6 @@ import PostCard from '../src/components/PostCard.vue'
 import BranchCard from '../src/components/BranchCard.vue'
 import PostCardWatchlist from '../src/components/PostCardWatchlist.vue'
 import InventoryCard from '../src/components/InventoryCard.vue'
-import PostCardEmployee from '../src/components/PostCardEmployee.vue'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import AuthService from './services/AuthService'
@@ -37,6 +36,5 @@ createApp(App)
     .component('Navbar', Navbar)
     .component('InventoryCard', InventoryCard)
     .component('PostCard', PostCard)
-    .component('PostCardEmployee', PostCardEmployee)
     .component('BranchCard', BranchCard)
     .mount('#app')

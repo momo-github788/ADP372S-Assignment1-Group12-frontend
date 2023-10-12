@@ -13,12 +13,14 @@
             <ul class="dropdown-menu">
                 <router-link class="dropdown-item text-dark" :to="{ name: 'posts' }">All posts</router-link>
 
-                <div v-if="auth">
+                <div v-if="isAdmin">
                     <router-link class="dropdown-item text-dark" :to="{ name: 'employee-posts'}">My posts</router-link>
-                    <router-link class="dropdown-item text-dark" :to="{ name: 'watchlisted' }">Watchlisted Posts</router-link>
                     <router-link class="dropdown-item text-dark" :to="{ name: 'create-post' }">Create a post</router-link>
                 </div>
-     
+
+                <div v-if="isUser">
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'watchlisted' }">Watchlisted Posts</router-link>
+                </div>  
             </ul>
             </li>
     
@@ -26,7 +28,7 @@
             <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Branches</a>
             <ul class="dropdown-menu">
                 <router-link class="dropdown-item text-dark" :to="{ name: 'branches' }">All branches</router-link>
-                <div v-if="auth">
+                <div v-if="isAdmin">
                     <router-link class="dropdown-item text-dark" :to="{ name: 'create-branch' }">Create a branch</router-link>
                 </div>
             </ul>
@@ -36,7 +38,7 @@
             <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Inventory</a>
             <ul class="dropdown-menu">
                 <router-link class="dropdown-item text-dark" :to="{ name: 'inventories' }">All Inventories</router-link>
-                <div v-if="auth">
+                <div v-if="isAdmin">
                     <router-link class="dropdown-item text-dark" :to="{ name: 'create-inventory' }">Create an inventory</router-link>
                 </div>
             </ul>
@@ -45,7 +47,7 @@
     
     
         <form class="d-flex nav-register-login">
-            <div v-if="auth">
+            <div v-if="isAdmin || isUser">
                 <button @click="logout" class="btn btn-primary" >
                     Logout
                 </button>
@@ -66,31 +68,27 @@
 import { onMounted, ref } from 'vue';
 import authService from '../services/AuthService';
 import { useRoute, useRouter } from 'vue-router';
+import { store } from '../store/Store';
 export default {
 
     setup() {
-        const auth = ref(false);
+        const isUser = ref(false);
+        const isAdmin = ref(false);
+
         const router = useRouter();
         
         onMounted(() => {
-           const user = authService.getCurrentUserJwt();
-
-           if(user) {
-            const authorities = user.authorities.map(a => a.authority);
-
-            auth.value = true;
-           } else {
-                console.log("d")
-           }
+            isAdmin.value = store.isAdmin;
+            isUser.value = store.isUser;
         })
 
         const logout = () => {
             authService.logout();
-            router.push("/login")
+        
         }
 
         return {
-            auth, logout
+            isAdmin, isUser, logout
         }
     }
 };

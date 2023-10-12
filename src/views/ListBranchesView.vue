@@ -68,8 +68,6 @@ export default {
                 toast.error("Post located at this branch is in use, delete that post to remove the branch.")
             }
         })
-
-  
     }
 
     onMounted(async () => {

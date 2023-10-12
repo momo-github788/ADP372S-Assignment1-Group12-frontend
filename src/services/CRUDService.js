@@ -1,17 +1,23 @@
 import axios from 'axios'
 import AuthService from './AuthService';
+import { store } from '../store/Store';
 
 const BASE_URL = 'http://localhost:8080'
 
 // Add Authorization token to header of EVERY request made to our api
 // Like a middleware
 axios.interceptors.request.use( config => {
+
   const user = AuthService.getCurrentUserJwt();
   console.log("axios.interceptors: ", user)
   if(user){
-      const token = 'Bearer ' + user.jwt;
-      config.headers.Authorization =  token;
+      const isAdmin = store.isAdmin;
+      const isUser = store.isUser;
+      config.headers.Authorization = 'Bearer ' + user.jwt;
+      config.url = config.url + `?type=${isAdmin? "EMPLOYEE" : "USER"}`
   }
+
+  console.log(config.url)
   return config;
 });
 

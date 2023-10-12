@@ -19,32 +19,51 @@
                 </form>
             </div>
         </div>
+        
     </div>
+
+       
 </section>
+
+
+<div class="container mt-5" id="landing-container">
+    
+<h1 class="fw-bold">Latest Posts</h1>
+    <div class="row mt-5">
+        <div class="col-md-4 mb-2 search-result-container">
+            <div class="mb-2" v-for="post in posts" :key="post.postId">
+            <PostCard :post="post" />
+            </div>
+        </div>
+    </div>
+</div>  
+
 </template>
 
 <script>
-import { ref} from 'vue'
+import { onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router';
+import crudService from '../services/CRUDService';
+import PostCard from '../components/PostCard.vue';
 
 export default {
     setup() {
         const title = ref('');
         const router = useRouter();
-     
-
-
+        const posts = ref(null);
         const handleSubmit = () => {
-            router.push({ path: 'posts', query: { title: title.value }})
-
-            
-        }
-
+            router.push({ path: 'posts', query: { title: title.value } });
+        };
+        onMounted(async () => {
+            posts.value = await crudService.getAll('post', 'search', null);
+            console.log("posts")
+            console.log(posts.value)
+        }); 
         return {
-            title, handleSubmit
-        }
-
-    }
+            title, handleSubmit, posts
+        };
+    },
+    components: { PostCard }
 }
 </script>
 
