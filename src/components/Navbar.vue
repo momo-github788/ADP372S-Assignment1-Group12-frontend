@@ -53,8 +53,8 @@
                 </button>
             </div>
             <div v-else>
-                <router-link class="btn btn-primary" style="margin-right:1rem" :to="{ name: 'register' }">Register</router-link>
-                <router-link class="btn btn-secondary" :to="{ name: 'login' }">Login</router-link>
+                <router-link class="btn btn-primary" style="margin-right:1rem" :to="{ name: 'registerUser' }">Register</router-link>
+                <router-link class="btn btn-secondary" :to="{ name: 'loginUser' }">Login</router-link>
             </div>
       
         </form>

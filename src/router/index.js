@@ -16,8 +16,10 @@ import PostDetailsView from '../views/PostDetailsView.vue'
 
 import LandingView from '../views/LandingView.vue'
 import ListPostsView from '../views/ListPostsView.vue'
-import RegisterView from '../views/RegisterView.vue'
-import LoginView from '../views/LoginView.vue'
+import RegisterUserView from '../views/RegisterUserView.vue'
+import RegisterEmployeeView from '../views/RegisterEmployeeView.vue'
+import LoginUserView from '../views/LoginUserView.vue'
+import LoginEmployeeView from '../views/LoginEmployeeView.vue'
 import UserWatchlistedPostsView from '../views/UserWatchlistedPostsView.vue'
 import EmployeeListPostsView from '../views/EmployeeListPostsView.vue'
 import authService from '../services/AuthService';
@@ -95,14 +97,24 @@ const router = createRouter({
       meta: {requiresAuth: true, requiresUser: true}
     },
     {
-      path: '/register',
-      name: 'register',
-      component: RegisterView
+      path: '/registerUser',
+      name: 'registerUser',
+      component: RegisterUserView
     },
     {
-      path: '/login',
-      name: 'login',
-      component: LoginView
+      path: '/registerEmployee',
+      name: 'registerEmployee',
+      component: RegisterEmployeeView
+    },
+    {
+      path: '/loginUser',
+      name: 'loginUser',
+      component: LoginUserView
+    },
+    {
+      path: '/loginEmployee',
+      name: 'loginEmployee',
+      component: LoginEmployeeView
     },
     {
       path: '/employee-posts',
