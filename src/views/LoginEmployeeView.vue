@@ -29,6 +29,7 @@ import { ref, watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import authService from '../services/AuthService';
 import { useToast } from "vue-toastification";
+import { store } from '../store/Store';
 
 export default {
     setup() {
@@ -36,8 +37,8 @@ export default {
         const router = useRouter();
 
         const user = ref({
-            emailAddress: '',
-            password: ''
+            emailAddress: 'employee@gmail.com',
+            password: 'password'
         });
 
         const isLoading = ref(false);
@@ -48,11 +49,10 @@ export default {
             console.log(user.value);
 
             authService.loginEmployee(user.value).then(res => {
-
                 if(res) {
                     toast.success("Login successful")
                     setTimeout(() => {
-                        router.push("/")
+                        window.location.href = "/"
                     }, 1500)
                 }
              

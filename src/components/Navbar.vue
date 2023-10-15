@@ -9,29 +9,29 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       
             <li class="nav-item dropdown">
-            <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Posts</a>
-            <ul class="dropdown-menu">
-                <router-link class="dropdown-item text-dark" :to="{ name: 'posts' }">All posts</router-link>
+                <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Posts</a>
+                <ul class="dropdown-menu">
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'posts' }">All posts</router-link>
 
-                <div v-if="isAdmin">
-                    <router-link class="dropdown-item text-dark" :to="{ name: 'employee-posts'}">My posts</router-link>
-                    <router-link class="dropdown-item text-dark" :to="{ name: 'create-post' }">Create a post</router-link>
-                </div>
+                    <div v-if="isAdmin">
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'employee-posts'}">My posts</router-link>
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'create-post' }">Create a post</router-link>
+                    </div>
 
-                <div v-if="isUser">
-                    <router-link class="dropdown-item text-dark" :to="{ name: 'watchlisted' }">Watchlisted Posts</router-link>
-                </div>  
-            </ul>
+                    <div v-if="isUser">
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'watchlisted' }">Watchlisted Posts</router-link>
+                    </div>  
+                </ul>
             </li>
     
             <li class="nav-item dropdown">
-            <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Branches</a>
-            <ul class="dropdown-menu">
-                <router-link class="dropdown-item text-dark" :to="{ name: 'branches' }">All branches</router-link>
-                <div v-if="isAdmin">
-                    <router-link class="dropdown-item text-dark" :to="{ name: 'create-branch' }">Create a branch</router-link>
-                </div>
-            </ul>
+                <a class="nav-link text-light dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Branches</a>
+                <ul class="dropdown-menu">
+                    <router-link class="dropdown-item text-dark" :to="{ name: 'branches' }">All branches</router-link>
+                    <div v-if="isAdmin">
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'create-branch' }">Create a branch</router-link>
+                    </div>
+                </ul>
             </li>
 
             <li class="nav-item dropdown">
@@ -47,14 +47,28 @@
     
     
         <form class="d-flex nav-register-login">
-            <div v-if="isAdmin || isUser">
+            <div v-if="isUser || isAdmin">
                 <button @click="logout" class="btn btn-primary" >
                     Logout
                 </button>
             </div>
-            <div v-else>
-                <router-link class="btn btn-primary" style="margin-right:1rem" :to="{ name: 'registerUser' }">Register</router-link>
-                <router-link class="btn btn-secondary" :to="{ name: 'loginUser' }">Login</router-link>
+            <div v-else class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown ">
+                    <a id="primary-btn" style="text-decoration: none;"  data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">User Authentication </a>
+                    <ul class="dropdown-menu">
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'registerUser' }">Register</router-link>
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'loginUser' }">Login</router-link>
+                    </ul>
+                </li>
+                <span class="p-1"></span>
+
+                <li class="nav-item dropdown ">
+                    <a id="tertiary-btn" style="text-decoration: none;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Employee Authentication</a>
+                    <ul class="dropdown-menu">
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'registerEmployee' }">Register</router-link>
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'loginEmployee' }">Login</router-link>
+                    </ul>
+                </li>
             </div>
       
         </form>
@@ -74,12 +88,19 @@ export default {
     setup() {
         const isUser = ref(false);
         const isAdmin = ref(false);
+        const isAuth = ref(false);
 
         const router = useRouter();
         
         onMounted(() => {
             isAdmin.value = store.isAdmin;
             isUser.value = store.isUser;
+            isAuth.value = store.isAuth;
+
+            console.log("store.isUser " + store.isUser)
+            console.log("store.isAdmin " + store.isAdmin)
+
+            console.log("store.isAuth " + store.isAuth)
         })
 
         const logout = () => {
@@ -88,7 +109,7 @@ export default {
         }
 
         return {
-            isAdmin, isUser, logout
+            isAdmin, isUser, isAuth, logout
         }
     }
 };

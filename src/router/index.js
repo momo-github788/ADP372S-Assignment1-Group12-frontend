@@ -143,7 +143,7 @@ router.beforeEach((to, from, next) => {
 
     if(!user) {
       toast.info("You are not allowed to access this resource.")
-      next('/login') // Redirect them to login page
+      next('/loginEmployee') // Redirect them to login page
     }
   }
   next();

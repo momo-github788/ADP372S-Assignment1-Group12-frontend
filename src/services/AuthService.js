@@ -1,5 +1,7 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { useToast } from "vue-toastification";
+
 
 const BASE_URL = 'http://localhost:8080/auth'
 
@@ -34,10 +36,16 @@ class AuthService {
     }
   
     async loginUser(request) {
-      console.log("request")
-      console.log(request)
+
+      if(this.getCurrentUserJwt()) {
+        useToast().error("You are already logged in..")
+        return;
+      }
+  
       try {
           const response = await axios.post(`${BASE_URL}/login?type=USER`, request);
+        
+    
           console.log(response)
           if(response) {
             console.log("setting local storgae..")
@@ -51,8 +59,10 @@ class AuthService {
     }
 
     async loginEmployee(request) {
-      console.log("request")
-      console.log(request)
+      if(this.getCurrentUserJwt()) {
+        useToast().error("You are already logged in..")
+        return;
+      }
       try {
           const response = await axios.post(`${BASE_URL}/login?type=EMPLOYEE`, request);
           console.log(response)
@@ -76,12 +86,18 @@ class AuthService {
     getCurrentUserJwt  = () => {
 
       let jwt = JSON.parse(localStorage.getItem("user"))
-
-      if(jwt === null || jwt === undefined || jwt == '') {
+      console.log("jwwt")
+      console.log(jwt)
+      if(jwt === null) {
+        console.log("return false")
           return false;
       } else {
+        console.log("return jwt")
+
           return jwt;
       }
+
+      
   }
 
   getCurrentUserSubject = () => {
