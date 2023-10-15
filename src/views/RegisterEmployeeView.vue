@@ -3,7 +3,7 @@
   <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h1 class="mb-4 fw-bold">Register</h1>
+            <h1 class="mb-4 fw-bold">Employee Register</h1>
             <form @submit.prevent="handleSubmit">
                 <div class="mb-2">
                     <label for="firstName" class="form-label">First Name</label>
@@ -26,6 +26,8 @@
                     <input type="password" class="form-control" id="password" name="password" v-model="user.password" required>
                 </div>
                 <button type="submit" class="fw-bold btn btn-primary w-100 p-3">Register</button>
+
+                <p>Please click <a href="http://localhost:5173/registerUser">here</a> to register as User.</p>
             </form>
         </div>
     </div>
@@ -85,7 +87,7 @@ export default {
                     console.log(res)
                     toast.success("Account created successfully");
                     setTimeout(() => {
-                        router.push('/login')
+                        router.push('/loginEmployee')
                     }, 1500)
                 }).catch(err => {
                     console.log(err)

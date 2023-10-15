@@ -33,11 +33,11 @@ class AuthService {
       }
     }
   
-    async login(request) {
+    async loginUser(request) {
       console.log("request")
       console.log(request)
       try {
-          const response = await axios.post(`${BASE_URL}/login?type=user`, request);
+          const response = await axios.post(`${BASE_URL}/login?type=USER`, request);
           console.log(response)
           if(response) {
             console.log("setting local storgae..")
@@ -49,6 +49,24 @@ class AuthService {
       }
 
     }
+
+    async loginEmployee(request) {
+      console.log("request")
+      console.log(request)
+      try {
+          const response = await axios.post(`${BASE_URL}/login?type=EMPLOYEE`, request);
+          console.log(response)
+          if(response) {
+            console.log("setting local storgae..")
+            localStorage.setItem("user", JSON.stringify(response.data));
+          }
+          return response.data
+      } catch (error) {
+        throw new Error(error.response.data)
+      }
+
+    }
+
 
     logout = () => {
       localStorage.removeItem("user");
