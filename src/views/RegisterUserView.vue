@@ -3,7 +3,7 @@
   <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h1 class="mb-4 fw-bold">User Register</h1>
+            <h1 class="mb-4 fw-bold" style="color:rgb(56, 56, 56);">User Register</h1>
             <form @submit.prevent="handleSubmit">
                 <div class="mb-2">
                     <label for="firstName" class="form-label">First Name</label>
@@ -27,7 +27,8 @@
                 </div>
                 <button type="submit" class="fw-bold btn btn-primary w-100 p-3">Register</button>
 
-                <p>Please click <a href="http://localhost:5173/registerEmployee">here</a> to register as Employee.</p>
+                <p>Please click <a style="color:rgb(180, 0, 0);"
+                    href="http://localhost:5173/registerEmployee">here</a> to register as Employee.</p>
             </form>
         </div>
     </div>
