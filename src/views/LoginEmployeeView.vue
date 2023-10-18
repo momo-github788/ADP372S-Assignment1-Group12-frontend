@@ -3,7 +3,7 @@
     <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h1 class="mb-4 fw-bold">Employee Login</h1>
+            <h1 class="mb-4 fw-bold" style="color:rgb(56, 56, 56);">Employee Login</h1>
             <form @submit.prevent="handleSubmit">
                 <div class="mb-2">  
                     <span style="color: red; font-size:.75rem; float: right" v-if="errors.emailAddress">{{errors.emailAddress}}</span>
@@ -15,7 +15,7 @@
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" v-model="user.password" required>
                 </div>
-                <button type="submit" class="fw-bold btn btn-primary w-100 p-3">{{ isLoading ? 'Logging up...' : 'Login' }}</button>
+                <button type="submit" class="fw-bold btn btn-danger w-100 p-3">{{ isLoading ? 'Logging up...' : 'Login' }}</button>
 
                 <p>Please click <a href="http://localhost:5173/loginUser">here</a> to login as User.</p>
             </form>

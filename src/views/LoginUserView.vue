@@ -3,7 +3,7 @@
     <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h1 class="mb-4 fw-bold">User Login</h1>
+            <h1 class="mb-4 fw-bold" style="color:rgb(56, 56, 56);">User Login</h1>
             <form @submit.prevent="handleSubmit">
                 <div class="mb-2">  
                     <span style="color: red; font-size:.75rem; float: right" v-if="errors.emailAddress">{{errors.emailAddress}}</span>
@@ -17,7 +17,8 @@
                 </div>
                 <button type="submit" class="fw-bold btn btn-primary w-100 p-3">{{ isLoading ? 'Logging up...' : 'Login' }}</button>
 
-                <p>Please click <a href="http://localhost:5173/loginEmployee">here</a> to login as Employee.</p>
+                <p>Please click <a style="color:rgb(180, 0, 0);" 
+                    href="http://localhost:5173/loginEmployee">here</a> to login as Employee.</p>
             </form>
         </div>
     </div>
