@@ -23,6 +23,7 @@ import LoginEmployeeView from '../views/LoginEmployeeView.vue'
 import UserWatchlistedPostsView from '../views/UserWatchlistedPostsView.vue'
 import EmployeeListPostsView from '../views/EmployeeListPostsView.vue'
 import authService from '../services/AuthService';
+import UpdateEmployeeDetailsView from '../views/UpdateEmployeeDetailsView.vue';
 import { store } from '../store/Store';
 
 
@@ -123,10 +124,16 @@ const router = createRouter({
       meta: {requiresAuth: true}
     },
     {
+      path: '/update-employee',
+      name: 'update-employee', 
+      component: UpdateEmployeeDetailsView, 
+    },
+    {
       path: "/:catchAll(.*)",
       name: "NotFound",
       component: () => import ('../views/NotFoundView.vue')
     }
+    
   ]
 })
 
