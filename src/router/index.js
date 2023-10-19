@@ -22,6 +22,7 @@ import LoginUserView from '../views/LoginUserView.vue'
 import LoginEmployeeView from '../views/LoginEmployeeView.vue'
 import UserWatchlistedPostsView from '../views/UserWatchlistedPostsView.vue'
 import EmployeeListPostsView from '../views/EmployeeListPostsView.vue'
+import updateUserView from '../views/updateUserView.vue'
 import authService from '../services/AuthService';
 import UpdateEmployeeDetailsView from '../views/UpdateEmployeeDetailsView.vue';
 import { store } from '../store/Store';
@@ -116,6 +117,11 @@ const router = createRouter({
       path: '/loginEmployee',
       name: 'loginEmployee',
       component: LoginEmployeeView
+    },
+    {
+      path: '/updateUser',
+      name: 'updateUser',
+      component: updateUserView,
     },
     {
       path: '/employee-posts',
