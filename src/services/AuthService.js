@@ -1,17 +1,14 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useToast } from "vue-toastification";
+import {authStore} from '../store/AuthStore'
 
-
-const BASE_URL = 'http://localhost:8080/auth'
-
+const BASE_URL = `${authStore.APP_URL}/auth`;
 
 
 class AuthService {
 
     async registerUser(request) {
-      console.log("request")
-      console.log(request)
       try {
           const response = await axios.post(`${BASE_URL}/user/register`, request);
 
@@ -27,7 +24,6 @@ class AuthService {
       console.log(request)
       try {
           const response = await axios.post(`${BASE_URL}/employee/register`, request);
-
           return response.data
       } catch (error) {
         // Handle errors here
@@ -45,10 +41,7 @@ class AuthService {
       try {
           const response = await axios.post(`${BASE_URL}/login?type=USER`, request);
         
-    
-          console.log(response)
           if(response) {
-            console.log("setting local storgae..")
             localStorage.setItem("user", JSON.stringify(response.data));
           }
           return response.data
@@ -65,9 +58,7 @@ class AuthService {
       }
       try {
           const response = await axios.post(`${BASE_URL}/login?type=EMPLOYEE`, request);
-          console.log(response)
           if(response) {
-            console.log("setting local storgae..")
             localStorage.setItem("user", JSON.stringify(response.data));
           }
           return response.data
@@ -86,14 +77,9 @@ class AuthService {
     getCurrentUserJwt  = () => {
 
       let jwt = JSON.parse(localStorage.getItem("user"))
-      console.log("jwwt")
-      console.log(jwt)
       if(jwt === null) {
-        console.log("return false")
           return false;
       } else {
-        console.log("return jwt")
-
           return jwt;
       }
 

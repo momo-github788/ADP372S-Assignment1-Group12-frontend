@@ -1,7 +1,8 @@
 import axios from "axios"
+import { authStore } from '../store/AuthStore';
 
-const BASE_URL = 'http://localhost:8080/vehicleInventory'
 
+const BASE_URL = `${authStore.APP_URL}/vehicleInventory`;
 class VehicleInventoryService {
     async createVehicleInventory(inventoryId, vehicleId) {
         try {

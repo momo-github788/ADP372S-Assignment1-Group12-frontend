@@ -1,6 +1,7 @@
 import axios from "axios"
+import { authStore } from '../store/AuthStore';
 
-const BASE_URL = 'http://localhost:8080/post'
+const BASE_URL = `${authStore.APP_URL}/post`;
 
 
 class PostService {
