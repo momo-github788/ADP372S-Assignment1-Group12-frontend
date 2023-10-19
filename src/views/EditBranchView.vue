@@ -62,13 +62,9 @@ export default {
         const router = useRouter();
         const toast = useToast(); 
 
-
-
         // perform code as soon as the component mounts (initialization etc)
         onMounted(async () => {
-        
-    
-
+      
             // id of the given branch
             const id = route.params.id;
             branch.value = await crudService.getById('branch', id);

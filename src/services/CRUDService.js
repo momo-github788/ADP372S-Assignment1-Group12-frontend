@@ -13,12 +13,24 @@ axios.interceptors.request.use( config => {
   console.log(BASE_URL)
   const user = AuthService.getCurrentUserJwt();
 
+
+
+
   if(user){
       const isAdmin = store.isAdmin;
       config.headers.Authorization = 'Bearer ' + user.jwt;
       config.url = config.url + `?type=${isAdmin? "EMPLOYEE" : "USER"}`
-  
   }
+
+  if(config.url.includes("/post/search?title=")) {
+    console.log("you are searching for a car")
+
+    config.url = config.url.replace("?type=USER", "")
+
+
+  }
+
+  console.log(config.url)
   return config;
 });
 
@@ -28,13 +40,20 @@ class ApiService {
   // for searching posts also
   async getAll(domain, action, title) {
     try {
-      let response
+      let response;
 
+      console.log("title " + title)
       // We know this is for searching posts
       if (title && title != null) {
+        console.log('title is not null')
         response = await axios.get(`${BASE_URL}/${domain}/${action}?title=${title}`)
+        console.log(response)
+
       } else {
+        console.log('title is null')
+
         response = await axios.get(`${BASE_URL}/${domain}/${action}`)
+        console.log(response)
       }
       return response.data
     } catch (error) {

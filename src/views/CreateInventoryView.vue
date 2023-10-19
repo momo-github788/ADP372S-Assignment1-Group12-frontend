@@ -88,7 +88,6 @@ export default {
 
         const handleVehicleFilter = async (event) => {
             let type = event.target.value;
-            console.log("condition: " + type)
 
             let filteredVehicles = await crudService.getAll('vehicle', 'all', null);
 
@@ -99,9 +98,6 @@ export default {
             } else if(type === "DEMO"){
                 vehicles.value = filteredVehicles.filter(v => v.condition === "DEMO");
             }
-
-            console.log("vehicles")
-            console.log(vehicles.value)
    
         }
         
@@ -127,24 +123,14 @@ export default {
                 .then(res => {
                     if(res) {
                         toast.success("Inventory created successfully!", {timeout: 3000})
-                        //console.log("created id " + res.inventoryId)
-                        console.log("selected vehicle")
-                        console.log(vehicleId)
                         // add vehicle to newly created inventory
                         vehicleInventoryService.createVehicleInventory(res.inventoryId, vehicleId.value)
                             .then(res => {
                                 toast.success("Vehicle added to inventory", {timeout: 3000})
-                                console.log("create vehicle inv")
-                                console.log(res)
                                 router.push('/inventories');
                             }).catch(err => {
                                 toast.success("Vehicle could not be added to inventory", {timeout: 3000})
-
-                                console.log("err vehicle inv")
-                                console.log(err)
                             }) 
-                        //console.log(res)
-                        //router.push('inventories')
                     }
                     
                 }).catch(err => {

@@ -8,6 +8,18 @@ const BASE_URL = `${authStore.APP_URL}/auth`;
 
 class AuthService {
 
+
+  async getByEmail(domain, emailAddress) {
+    try {
+      const response = await axios.get(`${authStore.APP_URL}/${domain}/readEmail/${emailAddress}`)
+      return response.data
+    } catch (error) {
+      // Handle errors here
+      console.error('Error fetching results:', error)
+      throw new Error(error.response.data)
+    }
+  }
+
     async registerUser(request) {
       try {
           const response = await axios.post(`${BASE_URL}/user/register`, request);
@@ -20,8 +32,6 @@ class AuthService {
     }
 
     async registerEmployee(request) {
-      console.log("request")
-      console.log(request)
       try {
           const response = await axios.post(`${BASE_URL}/employee/register`, request);
           return response.data
@@ -40,7 +50,7 @@ class AuthService {
   
       try {
           const response = await axios.post(`${BASE_URL}/login?type=USER`, request);
-        
+          console.log(response)
           if(response) {
             localStorage.setItem("user", JSON.stringify(response.data));
           }
@@ -65,6 +75,8 @@ class AuthService {
       } catch (error) {
         throw new Error(error.response.data)
       }
+
+      
 
     }
 

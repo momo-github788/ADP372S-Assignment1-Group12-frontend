@@ -43,8 +43,6 @@ export default {
 
     setup(props, {emit}) {
 
-        // console.log("props")
-        // console.log(props)
         const vehicles = ref(null);
         const toast = useToast();
         const router = useRouter();
@@ -63,7 +61,6 @@ export default {
             }
             
             vehicles.value = await vehicleInventoryService.getAllVehiclesByInventoryId(id);
-            //console.log(vehicles.value)
         })
   
         const handleDelete = () => {
@@ -73,12 +70,8 @@ export default {
   
 
         const handleDeleteVehicle = (vehicleId) => {
-            console.log("click delete vehic,e")
-
-
             vehicleInventoryService.deleteVehicleFromInventory(id, vehicleId)
                 .then(res => {
-                    console.log(res)
                     if(res) {
                         toast.success("Vehicle deleted successfully!")
                         vehicles.value = vehicles.value.filter(v => v.vehicleId !== vehicleId);
@@ -86,7 +79,6 @@ export default {
                     }
               
                 }).catch(err => {
-                    console.log(err)
                     if(err) {
                         toast.error("There was an error deleting, please try again later.")
                     }

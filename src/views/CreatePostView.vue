@@ -121,17 +121,17 @@ export default {
     
     const post = ref({
       title: "",
-      description: "test",
-      price: 9993,
+      description: "",
+      price: null,
       vehicle: {
-        make: "audi",
-        model: "a3",
-        year: 222,
-        mileage: 222,
-        colour: "red",
-        fuelType: 'PETROL',
-        condition: 'USED',
-        bodyType: 'SEDAN'
+        make: "",
+        model: "",
+        year: null,
+        mileage: null,
+        colour: "",
+        fuelType: '',
+        condition: '',
+        bodyType: ''
       },
       branch: {
         branchId: null

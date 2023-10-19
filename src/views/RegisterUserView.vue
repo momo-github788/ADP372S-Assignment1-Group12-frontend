@@ -27,8 +27,8 @@
                 </div>
                 <button type="submit" class="fw-bold btn btn-primary w-100 p-3">Register</button>
 
-                <p>Please click <a style="color:rgb(180, 0, 0);"
-                    href="http://localhost:5173/registerEmployee">here</a> to register as Employee.</p>
+                <p>Please click <router-link :to="{name: 'register-employee'}"> here </router-link> to register as an Employee.</p>
+
             </form>
         </div>
     </div>
@@ -54,6 +54,7 @@ export default {
             emailAddress: "",
             password: ""
         })
+
 
         const errors = ref({});
 

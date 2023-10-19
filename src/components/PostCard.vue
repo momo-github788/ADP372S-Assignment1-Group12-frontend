@@ -62,9 +62,6 @@ export default {
         if(user) {
             isAdmin.value = store.isAdmin;
             isUser.value = store.isUser;
-
-            console.log("is admin: " + isAdmin.value)
-            console.log("is user: " + isUser.value)
         }
     })
 
@@ -83,10 +80,8 @@ export default {
         const status = await watchlistPostService.getWatchlistedPostByPostId(id);
 
         if(status != null) {
-            console.log("is watchlist")
             isWatchlisted.value = true;
         } else {
-            console.log("not watchlist")
             isWatchlisted.value = false;
         }
     })

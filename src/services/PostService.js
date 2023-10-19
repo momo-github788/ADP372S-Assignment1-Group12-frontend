@@ -9,8 +9,6 @@ class PostService {
   async getAllEmployeePosts() {
     try {
       const response = await axios.get(`${BASE_URL}/all/employee`)
-      console.log("employee post")
-      console.log(response)
       return response.data
     } catch (error) {
       // Handle errors here
@@ -34,15 +32,12 @@ class PostService {
     
         try {
           if (image && image != null) {
-            console.log('there is an image multipart')
-    
             formData.append('image', image)
             formData.append('post', blob)
     
             const response = await axios.post(`${BASE_URL}/${action}`, formData, options)
             return response.data
           } else {
-            console.log('tHERE IS NO IMAGE MULTIPART')
             formData.append('post', blob)
             const response = await axios.post(`${BASE_URL}/${action}`, formData, options)
             return response.data

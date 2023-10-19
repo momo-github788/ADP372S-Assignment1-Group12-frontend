@@ -12,19 +12,15 @@ import AuthService from './services/AuthService'
 import jwtDecode from 'jwt-decode'
 
 const userJwt = AuthService.getCurrentUserJwt().jwt;
-console.log("uwer jwt")
-console.log(userJwt)
 
 if (userJwt) {
     const decodedToken = jwtDecode(userJwt);
-    console.log("decoded")
-    console.log(decodedToken)
     const currentTime = Date.now() / 1000;
 
     if (decodedToken.exp < currentTime) {
         AuthService.logout();
         window.location.reload();
-        window.location.href = "/register"
+        window.location.href = "/register-user"
     }
 }
 

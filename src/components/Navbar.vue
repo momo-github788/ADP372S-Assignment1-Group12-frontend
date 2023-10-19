@@ -47,7 +47,22 @@
     
     
         <form class="d-flex nav-register-login">
+
+
             <div v-if="isUser || isAdmin">
+                <router-link :to="{name: 'update-user'}" v-if="isUser">
+                    <button  class="btn btn-danger" style="margin-right: 1rem;" >
+                        My Profile
+                    </button>
+                </router-link>
+
+                <router-link :to="{name: 'update-employee'}" v-if="isAdmin">
+                    <button  class="btn btn-danger" style="margin-right: 1rem;" >
+                        My Profile
+                    </button>
+                </router-link>
+
+
                 <button @click="logout" class="btn btn-primary" >
                     Logout
                 </button>
@@ -56,8 +71,8 @@
                 <li class="nav-item dropdown ">
                     <a id="primary-btn" style="text-decoration: none;"  data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">User Authentication </a>
                     <ul class="dropdown-menu">
-                        <router-link class="dropdown-item text-dark" :to="{ name: 'registerUser' }">Register</router-link>
-                        <router-link class="dropdown-item text-dark" :to="{ name: 'loginUser' }">Login</router-link>
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'register-user' }">Register</router-link>
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'login-user' }">Login</router-link>
                     </ul>
                 </li>
                 <span class="p-1"></span>
@@ -65,8 +80,8 @@
                 <li class="nav-item dropdown ">
                     <a id="tertiary-btn" style="text-decoration: none;" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Employee Authentication</a>
                     <ul class="dropdown-menu">
-                        <router-link class="dropdown-item text-dark" :to="{ name: 'registerEmployee' }">Register</router-link>
-                        <router-link class="dropdown-item text-dark" :to="{ name: 'loginEmployee' }">Login</router-link>
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'register-employee' }">Register</router-link>
+                        <router-link class="dropdown-item text-dark" :to="{ name: 'login-employee' }">Login</router-link>
                     </ul>
                 </li>
             </div>
@@ -83,24 +98,23 @@ import { onMounted, ref } from 'vue';
 import authService from '../services/AuthService';
 import { useRoute, useRouter } from 'vue-router';
 import { store } from '../store/Store';
+import AuthService from '../services/AuthService';
 export default {
 
     setup() {
         const isUser = ref(false);
         const isAdmin = ref(false);
         const isAuth = ref(false);
+        const principal = ref(null);
 
         const router = useRouter();
         
         onMounted(() => {
+            principal.value = "user@gmail.com"
             isAdmin.value = store.isAdmin;
             isUser.value = store.isUser;
             isAuth.value = store.isAuth;
 
-            console.log("store.isUser " + store.isUser)
-            console.log("store.isAdmin " + store.isAdmin)
-
-            console.log("store.isAuth " + store.isAuth)
         })
 
         const logout = () => {
@@ -109,7 +123,7 @@ export default {
         }
 
         return {
-            isAdmin, isUser, isAuth, logout
+            isAdmin, isUser, isAuth, principal, logout
         }
     }
 };

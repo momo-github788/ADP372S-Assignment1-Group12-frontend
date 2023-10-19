@@ -1,77 +1,102 @@
 <template>
-  <div class="text-center p-4">
-    <h2 class="mb-4 fw-bold">Update Employee Details</h2>
-    <div class="container mt-5">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <form @submit.prevent="updateEmployee">
-            <div class="mb-2">
-              <label for="firstName" class="form-label">First Name:</label>
-              <input type="text" class="form-control" id="firstName" name="firstName" v-model="employee.name.firstName" required>
-            </div>
-            <div class="mb-2">
-              <label for="middleName" class="form-label">Middle Name:</label>
-              <input type="text" class="form-control" id="middleName" name="middleName" v-model="employee.name.middleName" required>
-            </div>
-            <div class="mb-2">
-              <label for="lastName" class="form-label">Last Name:</label>
-              <input type="text" class="form-control" id="lastName" name="lastName" v-model="employee.name.lastName" required>
-            </div>
-            <div class="mb-2">
-              <label for="emailAddress" class="form-label">Email Address:</label>
-              <input type="email" class="form-control" id="emailAddress" name="emailAddress" v-model="employee.emailAddress" required>
-            </div>
-            <div class="mb-2">
-              <label for="password" class="form-label">Password:</label>
-              <input type="password" class="form-control" id="password" name="password" v-model="employee.password" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 p-3">Update</button>
-          </form>
-        </div>
+  <Navbar/>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h1 class="mb-4 fw-bold" style="color:rgb(56, 56, 56);">Update Employee</h1>
+        <form @submit.prevent="handleSubmit">
+          <div class="mb-2">
+            <label for="firstName" class="form-label">First Name</label>
+            <span style="color: red; font-size:.75rem; float: right" v-if="errors.firstName">{{errors.firstName}}</span>
+            <input type="text" class="form-control" id="firstName" name="firstName" v-model="employee.name.firstName" required>
+          </div>
+          <div class="mb-2">
+            <label for="lastName" class="form-label">Last Name</label>
+            <span style="color: red; font-size:.75rem; float: right" v-if="errors.lastName">{{errors.lastName}}</span>
+            <input type="text" class="form-control" id="lastName" name="lastName" v-model="employee.name.lastName" required>
+          </div>
+          <div class="mb-2">
+            <label for="email" class="form-label">Email Address</label>
+            <span style="color: red; font-size:.75rem; float: right" v-if="errors.emailAddress">{{errors.emailAddress}}</span>
+            <input type="email" class="form-control" id="emailAddress" name="emailAddress" v-model="employee.emailAddress" required>
+          </div>
+          <div class="mb-2">
+            <label for="password" class="form-label">Password</label>
+            <span style="color: red; font-size:.75rem; float: right" v-if="errors.password">{{errors.password}}</span>
+            <input type="password" class="form-control" id="password" name="password" v-model="employee.password" required>
+          </div>
+          <button type="submit" class="fw-bold btn btn-primary w-100 p-3">Update</button>
+        </form>
       </div>
     </div>
   </div>
+
 </template>
 
 
   
 <script>
-import axios from 'axios'; // Import Axios for making HTTP requests
-axios.defaults.baseURL = 'http://localhost:8080';
-
+import { onMounted, ref } from 'vue';
+import CRUDService from '../services/CRUDService';
+import { useToast } from 'vue-toastification';
+import AuthService from '../services/AuthService';
+import router from '../router';
 export default {
-  data() {
-    return {
-      employee: {
-        name: {
-          firstName: '',
-          middleName: '',
-          lastName: '',
-        },
-        emailAddress: '',
-        password: '',
+  setup() {
+    const toast = useToast();
+    const employee = ref({
+      name: {
+        firstName: "",
+        lastName: ""
       },
-    };
-  },
-  methods: {
-    async updateEmployee() {
-      try {
-        // Send a PUT request to the API endpoint provided by EmployeeController
-        const response = await axios.post('/employee/update', this.employee);
+      emailAddress: "",
+      password: ""
+    })
 
-        if (response.status === 200) {
-          // Employee was updated successfully
-          alert('Employee updated successfully');
-        } else {
-          // Handle other HTTP status codes or error responses
-          alert('Error updating employee');
-        }
-      } catch (error) {
-        // Handle network errors or other exceptions
-        console.error(error);
-        alert('Error updating employee');
+    const errors = ref({});
+
+
+    onMounted(async () => {
+      employee.value = await AuthService.getByEmail('employee', AuthService.getCurrentUserSubject());
+    })
+
+
+    // Check length < 6
+    const validate = (value) => {
+      value.name.firstName === '' ? errors.value['firstName'] =  "Required" : errors.value['firstName'] =  ""
+      value.name.lastName === '' ? errors.value['lastName'] =  "Required" : errors.value['lastName'] =  ""
+      value.emailAddress === '' ? errors.value['emailAddress'] =  "Required" : errors.value['emailAddress'] =  ""
+      value.password.length < 6 ? errors.value['password'] =  "Minimum of 6 characters" : errors.value['password'] =  ""
+
+      console.log(errors.value)
+    }
+
+    const handleSubmit = async () => {
+      if(errors.value.password) {
+        toast.error("Password must be at least 6 characters.");
+        return;
       }
-    },
-  },
-};
+      await CRUDService.update('employee', employee.value)
+          .then(res => {
+            console.log("res")
+            console.log(res)
+            toast.success("Updated successfully");
+            setTimeout(() => {
+              router.push('/')
+            }, 500)
+          }).catch(err => {
+            console.log(err)
+            toast.error("Error updating user, please try again.");
+
+          })
+
+    }
+
+
+
+    return {
+      employee, handleSubmit, validate, errors
+    }
+  }
+}
 </script>

@@ -25,10 +25,7 @@
             <span style="color: red; font-size:.75rem; float: right" v-if="errors.password">{{errors.password}}</span>
             <input type="password" class="form-control" id="password" name="password" v-model="user.password" required>
           </div>
-          <button type="submit" class="fw-bold btn btn-primary w-100 p-3">Register</button>
-
-          <p>Please click <a style="color:rgb(180, 0, 0);"
-                             href="http://localhost:5173/updateUser">here</a> to Update User.</p>
+          <button type="submit" class="fw-bold btn btn-primary w-100 p-3">Update</button>
         </form>
       </div>
     </div>
@@ -37,14 +34,14 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import authService from '../services/AuthService'
 import { useToast } from "vue-toastification";
 import router from '../router';
+import CRUDService from '../services/CRUDService';
 
 export default {
   setup() {
-
     const toast = useToast();
     const user = ref({
       name: {
@@ -57,6 +54,13 @@ export default {
 
     const errors = ref({});
 
+    onMounted(async () => {
+      user.value = await authService.getByEmail('user', authService.getCurrentUserSubject());
+
+
+  })
+
+
     // Check length < 6
     const validate = (value) => {
       value.name.firstName === '' ? errors.value['firstName'] =  "Required" : errors.value['firstName'] =  ""
@@ -67,29 +71,20 @@ export default {
       console.log(errors.value)
     }
 
-    // This runs everytime a change is made to user object, can make validation here to show in real time ..
-    watch(user.value, (newVal,oldVal) => {
-      console.log("in watch")
-      validate(newVal);
-
-      if(errors.value) {
-        return;
-      }
-    })
 
     const handleSubmit = async () => {
       if(errors.value.password) {
         toast.error("Password must be at least 6 characters.");
         return;
       }
-      await authService.updateUser(user.value)
+      await CRUDService.update('user', user.value)
           .then(res => {
             console.log("res")
             console.log(res)
             toast.success("Updated successfully");
             setTimeout(() => {
-              router.push('/updateUser')
-            }, 1500)
+              router.push('/')
+            }, 500)
           }).catch(err => {
             console.log(err)
             toast.error("Error updating user, please try again.");

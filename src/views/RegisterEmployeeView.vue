@@ -27,7 +27,7 @@
                 </div>
                 <button type="submit" class="fw-bold btn btn-danger w-100 p-3">Register</button>
 
-                <p>Please click <a href="http://localhost:5173/registerUser">here</a> to register as User.</p>
+                <p>Please click <router-link :to="{name: 'register-user'}"> here </router-link> to register as User.</p>
             </form>
         </div>
     </div>
@@ -48,6 +48,7 @@ export default {
         const user = ref({
             name: {
                 firstName: "",
+                middleName: "",
                 lastName: ""
             },
             emailAddress: "",

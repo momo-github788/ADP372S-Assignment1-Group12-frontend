@@ -17,8 +17,8 @@
                 </div>
                 <button type="submit" class="fw-bold btn btn-primary w-100 p-3">{{ isLoading ? 'Logging up...' : 'Login' }}</button>
 
-                <p>Please click <a style="color:rgb(180, 0, 0);" 
-                    href="http://localhost:5173/loginEmployee">here</a> to login as Employee.</p>
+                <p>Please click <router-link :to="{name: 'login-employee'}"> here </router-link> to log in as an Employee.</p>
+
             </form>
         </div>
     </div>
@@ -38,8 +38,8 @@ export default {
         const router = useRouter();
 
         const user = ref({
-            emailAddress: 'user@gmail.com',
-            password: 'password'
+            emailAddress: '',
+            password: ''
         });
 
         const isLoading = ref(false);

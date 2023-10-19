@@ -49,14 +49,12 @@ export default {
     const toast = useToast();
 
     const handleDelete = (id) => {
-      console.log("id " + id)
       crudService.delete('post', id)
             .then(res => {
               if(res) {
                 toast.success("Post deleted successfully!")
                 posts.value = posts.value.filter(p => p.postId !== id)
               }
-              console.log(res)
             }).catch(err => {
                 toast.error("There was an error deleting, please try again later.")
             })
@@ -67,6 +65,8 @@ export default {
       loading.value = true;
       const title = route.query.title;
 
+     
+
       if(title && title != null) {
         posts.value = await crudService.getAll('post', 'search', title);
         loading.value = false;
@@ -74,11 +74,7 @@ export default {
         posts.value = await crudService.getAll('post', 'search', null);
         loading.value = false;
       }
-      console.log("posts")
-      console.log(posts.value)
-      
-
-
+    
     })
     
 
