@@ -49,12 +49,12 @@ export default {
     const toast = useToast();
 
     const handleDelete = (id) => {
+      console.log('in handle delete ' + id)
       crudService.delete('post', id)
             .then(res => {
-              if(res) {
                 toast.success("Post deleted successfully!")
                 posts.value = posts.value.filter(p => p.postId !== id)
-              }
+          
             }).catch(err => {
                 toast.error("There was an error deleting, please try again later.")
             })

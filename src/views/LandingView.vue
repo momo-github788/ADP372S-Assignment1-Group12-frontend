@@ -32,7 +32,7 @@
     <div class="row mt-5">
         <div class="col-md-4 mb-2 search-result-container">
             <div class="mb-2" v-for="post in posts" :key="post.postId">
-            <PostCard :post="post" />
+            <PostCard :post="post"  @delete-post="handleDelete(post.postId)"/>
             </div>
         </div>
     </div>
@@ -45,6 +45,7 @@ import { onMounted, ref} from 'vue'
 import { useRouter } from 'vue-router';
 import crudService from '../services/CRUDService';
 import PostCard from '../components/PostCard.vue';
+import { useToast } from 'vue-toastification';
 
 export default {
     setup() {
@@ -59,8 +60,20 @@ export default {
             console.log("posts")
             console.log(posts.value)
         }); 
+
+        const handleDelete = (id) => {
+        console.log('in handle delete ' + id)
+        crudService.delete('post', id)
+                .then(res => {
+                    useToast().success("Post deleted successfully!")
+                    posts.value = posts.value.filter(p => p.postId !== id)
+            
+                }).catch(err => {
+                    useToast().error("There was an error deleting, please try again later.")
+                })
+        }
         return {
-            title, handleSubmit, posts
+            title, handleSubmit, posts, handleDelete
         };
     },
     components: { PostCard }

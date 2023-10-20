@@ -78,6 +78,7 @@ export default {
 
 
     const handleDelete = () => {
+
         emit("delete-post", id)
     }
 

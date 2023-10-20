@@ -55,11 +55,9 @@ export default {
           console.log("id " + id)
           crudService.delete('post', id)
                 .then(res => {
-                  if(res) {
                     useToast().success("Post deleted successfully!")
                     posts.value = posts.value.filter(p => p.postId !== id)
-                  }
-                  console.log(res)
+                    console.log(res)
                 }).catch(err => {
                   useToast().error("There was an error deleting, please try again later.")
                 })
