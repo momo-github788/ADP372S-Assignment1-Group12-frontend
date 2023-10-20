@@ -140,7 +140,17 @@ const router = createRouter({
       component: () => import ('../views/NotFoundView.vue')
     }
     
-  ]
+  ],
+  "globalHeaders": {
+    "content-security-policy": "default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'"
+  },
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/img/*.{png,jpg,gif,webp}", "/css/*"]
+  },
+  "mimeTypes": {
+    "custom": "text/html"
+  }
 })
 
 
