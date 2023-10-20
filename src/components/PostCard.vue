@@ -7,7 +7,12 @@
                 class="card-img-top" alt="Car">
         </div>
         <div class="card-body">
-            <h5 class="card-title">{{post.title}}</h5>
+
+            <span>
+                <h5 class="card-title">{{post.title}}</h5>
+                <h4 class="fw-bold card-title" style="color: rgb(67, 67, 251)">R{{post.price}}</h4>
+            </span>
+            
             <p class="card-text">{{post.description}}</p>
             
    

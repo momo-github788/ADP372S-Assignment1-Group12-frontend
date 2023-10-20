@@ -80,7 +80,7 @@ body .search-results-container .search-result-container .post-card,
 
 body .search-results-container .search-result-container .post-card img,
 #landing-container .search-result-container .post-card img {
-    height: 175px;
+    height: 240px;
 
 }
 body .search-results-container .search-result-container .post-card .card-body {

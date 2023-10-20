@@ -7,7 +7,10 @@
                 class="card-img-top" alt="Car">
         </div>
         <div class="card-body">
-            <h5 class="card-title">{{post.title}}</h5>
+            <span>
+                <h5 class="card-title">{{post.title}}</h5>
+                <h4 class="fw-bold card-title" style="color: rgb(67, 67, 251)">R{{post.price}}</h4>
+            </span>
             <p class="card-text">{{post.description}}</p>
             
             <router-link id="primary-btn" class="btn mb-2" style="margin-right: .5rem" :to="{name: 'post', params: {id: post.postId}}">
@@ -16,12 +19,13 @@
 
             <button id="primary-btn" class="btn mb-2"  @click="handleUnwatch">Unwatch</button>
             <br/>
-            <span>{{post.createdAt}}</span>
+            <span>Created at {{formattedDate}}</span>
         </div>
     </div>
 </template>
 
 <script>
+import { computed } from 'vue';
 export default {
   props: ['post'],
   setup(props, {emit}) {
@@ -33,9 +37,14 @@ export default {
        
     }
 
+    const formattedDate = computed(() => {
+        var date = new Date(props.post.createdAt);
+        return date.toString().substring(0, 15);
+    });
+
 
         return {
-            handleUnwatch, id
+            handleUnwatch, formattedDate, id
         }
   }
   
