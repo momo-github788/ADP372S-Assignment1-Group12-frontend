@@ -32,6 +32,7 @@ class VehicleInventoryService {
           throw new Error(error.response.data)
         }
       }
+      
     
       async deleteVehicleFromInventory(inventoryId, vehicleId) {
         try {
@@ -41,7 +42,7 @@ class VehicleInventoryService {
           }
           console.log(request)
     
-          const response = await axios.delete(`${BASE_URL}/delete`, request)
+          const response = await axios.post(`${BASE_URL}/delete`, request)
           return response.data
         } catch (error) {
           // Handle errors here

@@ -12,21 +12,22 @@ axios.interceptors.request.use( config => {
 
   console.log(BASE_URL)
   const user = AuthService.getCurrentUserJwt();
-
+  const isAdmin = store.isAdmin;
 
 
 
   if(user){
-      const isAdmin = store.isAdmin;
+      
       config.headers.Authorization = 'Bearer ' + user.jwt;
       config.url = config.url + `?type=${isAdmin? "EMPLOYEE" : "USER"}`
   }
 
   if(config.url.includes("/post/search?title=")) {
-    console.log("you are searching for a car")
 
-    config.url = config.url.replace("?type=USER", "")
-
+    if(isAdmin)
+      config.url = config.url.replace("?type=EMPLOYEE", "")
+    else 
+      config.url = config.url.replace("?type=USER", "")
 
   }
 
