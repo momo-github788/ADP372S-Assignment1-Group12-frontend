@@ -39,7 +39,7 @@
 import { onMounted, ref } from 'vue';
 import CRUDService from '../services/CRUDService';
 import { useToast } from 'vue-toastification';
-import AuthService from '../services/AuthService';
+import authService from '../services/AuthService';
 import router from '../router';
 export default {
   setup() {
@@ -57,7 +57,7 @@ export default {
 
 
     onMounted(async () => {
-      employee.value = await AuthService.getByEmail('employee', AuthService.getCurrentUserSubject());
+      employee.value = await authService.getByEmail('employee', authService.getCurrentUserSubject());
     })
 
 
