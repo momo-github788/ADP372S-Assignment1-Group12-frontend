@@ -25,7 +25,7 @@
             <span style="color: red; font-size:.75rem; float: right" v-if="errors.password">{{errors.password}}</span>
             <input type="password" class="form-control" id="password" name="password" v-model="employee.password" required>
           </div>
-          <button type="submit" class="fw-bold btn btn-primary w-100 p-3">Update</button>
+          <button type="submit" class="fw-bold btn btn-danger w-100 p-3">Update</button>
         </form>
       </div>
     </div>
